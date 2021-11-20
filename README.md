@@ -38,3 +38,8 @@ copy .vscode/settings.json
 copy tsconfig.eslint.json
 reload IDE
 ```
+
+
+```bash
+npm i nedb retry promisify axios cheerio 
+```
