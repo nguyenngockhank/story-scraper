@@ -25,6 +25,7 @@
     "@nestjs/platform-express": "^8.1.1",
     "axios": "^0.23.0",
     "cheerio": "^1.0.0-rc.10",
+    "ejs": "^3.1.6",
     "nedb": "^1.8.0",
     "promisify": "^0.0.3",
     "reflect-metadata": "^0.1.13",

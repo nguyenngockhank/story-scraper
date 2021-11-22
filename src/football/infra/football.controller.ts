@@ -1,4 +1,6 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get, Inject, Render } from "@nestjs/common";
+import { PostRepository } from "../domain/PostRepository";
+import { footballItems } from "../domain/FootballContainer";
 import { PostsLatestGetUseCase } from "../use-cases/PostsLatestGetUseCase";
 import { PostsLatestScrapeUseCase } from "../use-cases/PostsLatestScrapeUseCase";
 
@@ -6,16 +8,26 @@ import { PostsLatestScrapeUseCase } from "../use-cases/PostsLatestScrapeUseCase"
 export class FootballController {
   constructor(
     private postsLatestGetUC: PostsLatestGetUseCase,
-    private postsLatestScrape: PostsLatestScrapeUseCase,
+    private postsLatestScrapeUC: PostsLatestScrapeUseCase,
+
+    @Inject(footballItems.PostRepository)
+    private postRepo: PostRepository,
   ) {}
 
-  @Get("football/news")
+  @Get("api/football/news")
   getLatestNews() {
     return this.postsLatestGetUC.execute();
   }
 
-  @Get("football/news/scrape")
+  @Get("api/football/news/scrape")
   scrapeLatestNews() {
-    return this.postsLatestScrape.execute();
+    return this.postsLatestScrapeUC.execute();
+  }
+
+  @Get("football/news")
+  @Render("index")
+  async viewNews() {
+    const posts = await this.postsLatestGetUC.execute();
+    return { posts };
   }
 }

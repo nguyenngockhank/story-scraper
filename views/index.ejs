@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Football App</title>
+  </head>
+  <body>
+    <% posts.forEach((post) => { %>
+      <article>
+        <h3><a href="<%= post.href %>"><%= post.title %></a></h3>
+        <p><%= post.summary %></p>
+      </article>
+    <% }); %>
+  </body>
+</html>
