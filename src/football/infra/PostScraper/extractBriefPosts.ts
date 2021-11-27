@@ -1,4 +1,4 @@
-import { WrappedDOM, WrappedNode } from "../../../shared/domain/Scraper";
+import { WrappedDOM, WrappedNode } from "../../../Shared/domain/Scraper";
 import { BriefPost } from "../../domain/Post";
 
 export type SelectorOptions = {

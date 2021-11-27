@@ -1,12 +1,12 @@
 import { Global, Module } from "@nestjs/common";
 import { FootballModule } from "./football/infra/football.module";
-import { TransformerModule } from "./transformer/infra/transformer.module";
-import { appItems } from "./shared/domain/AppContainer";
-import { NedbDatastoreFactory } from "./shared/infra/Datastore/NedbDatastoreFactory";
-import { AxiosScraper } from "./shared/infra/Scraper/AxiosScraper";
-import { Finder } from "./shared/domain/Finder";
-import { DownloaderImpl } from "./shared/infra/DownloaderImpl";
-import { Mp3ProcessorImpl } from "./shared/infra/Mp3Processor/Mp3ProcessorImpl";
+import { TransformerModule } from "./Transformer/infra/transformer.module";
+import { appItems } from "./Shared/domain/AppContainer";
+import { NedbDatastoreFactory } from "./Shared/infra/Datastore/NedbDatastoreFactory";
+import { AxiosScraper } from "./Shared/infra/Scraper/AxiosScraper";
+import { Finder } from "./Shared/domain/Finder";
+import { DownloaderImpl } from "./Shared/infra/DownloaderImpl";
+import { Mp3ProcessorImpl } from "./Shared/infra/Mp3Processor/Mp3ProcessorImpl";
 
 @Global()
 @Module({

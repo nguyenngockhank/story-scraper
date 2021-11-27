@@ -2,8 +2,8 @@ import {
   appItems,
   Injectable,
   Inject,
-} from "../../../shared/domain/AppContainer";
-import { Scraper } from "../../../shared/domain/Scraper";
+} from "../../../Shared/domain/AppContainer";
+import { Scraper } from "../../../Shared/domain/Scraper";
 import { BriefPost, Post } from "../../domain/Post";
 import { PostScraper } from "../../domain/PostScraper";
 import { extractBriefPosts } from "./extractBriefPosts";

@@ -1,4 +1,4 @@
-import { Story } from "../../story/domain/StoryRepository";
+import { Story } from "../../Story/domain/StoryRepository";
 
 export type OutputOptions = {
   fileName: string;

@@ -2,16 +2,16 @@ import {
   appItems,
   Inject,
   Injectable,
-} from "../../../shared/domain/AppContainer";
-import { Finder } from "../../../shared/domain/Finder";
-import { storyItems } from "../../../story/domain/StoryContainer";
-import { Story, StoryRepository } from "../../../story/domain/StoryRepository";
+} from "../../../Shared/domain/AppContainer";
+import { Finder } from "../../../Shared/domain/Finder";
+import { storyItems } from "../../../Story/domain/StoryContainer";
+import { Story, StoryRepository } from "../../../Story/domain/StoryRepository";
 import { EpubReader } from "../../domain/EpubReader";
-import { Mp3Processor } from "../../../shared/domain/Mp3Processor";
+import { Mp3Processor } from "../../../Shared/domain/Mp3Processor";
 import { FileName, Transformer } from "../../domain/Transformer";
 import { transformerItems } from "../../domain/TransformerContainer";
 import { TextToMp3Transfomer } from "./TextToMp3Transfomer";
-import { Downloader } from "../../../shared/domain/Downloader";
+import { Downloader } from "../../../Shared/domain/Downloader";
 
 @Injectable()
 export class TransformerImpl implements Transformer {

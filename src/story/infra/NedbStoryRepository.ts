@@ -1,5 +1,5 @@
-import { Injectable } from "../../shared/domain/AppContainer";
-import { NedbDatastoreFactory } from "../../shared/infra/Datastore/NedbDatastoreFactory";
+import { Injectable } from "../../Shared/domain/AppContainer";
+import { NedbDatastoreFactory } from "../../Shared/infra/Datastore/NedbDatastoreFactory";
 import { Chapter } from "../domain/Chapter";
 import { ChapterContent } from "../domain/ChapterContent";
 import { StoryRepository } from "../domain/StoryRepository";

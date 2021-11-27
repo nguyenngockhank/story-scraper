@@ -1,7 +1,7 @@
 import * as EPub from "epub";
 import * as slug from "slug";
-import { Chapter } from "../../story/domain/Chapter";
-import { ChapterContent } from "../../story/domain/ChapterContent";
+import { Chapter } from "../../Story/domain/Chapter";
+import { ChapterContent } from "../../Story/domain/ChapterContent";
 import { EpubReader, StoryDetail } from "../domain/EpubReader";
 
 export class EpubReaderImpl implements EpubReader {

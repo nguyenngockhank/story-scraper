@@ -1,6 +1,6 @@
-import { Chapter } from "../../story/domain/Chapter";
-import { ChapterContent } from "../../story/domain/ChapterContent";
-import { Story } from "../../story/domain/StoryRepository";
+import { Chapter } from "../../Story/domain/Chapter";
+import { ChapterContent } from "../../Story/domain/ChapterContent";
+import { Story } from "../../Story/domain/StoryRepository";
 
 export type StoryDetail = {
   story: Story;

@@ -1,8 +1,8 @@
 import * as googleTTS from "google-tts-api";
-import { Finder } from "../../../shared/domain/Finder";
+import { Finder } from "../../../Shared/domain/Finder";
 import { convert } from "html-to-text";
-import { Mp3Processor } from "../../../shared/domain/Mp3Processor";
-import { Downloader, DownloadItem } from "../../../shared/domain/Downloader";
+import { Mp3Processor } from "../../../Shared/domain/Mp3Processor";
+import { Downloader, DownloadItem } from "../../../Shared/domain/Downloader";
 
 type ConvertDir = { outputDir: string; tempDir: string };
 

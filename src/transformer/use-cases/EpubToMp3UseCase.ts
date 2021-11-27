@@ -1,4 +1,4 @@
-import { Injectable } from "../../shared/domain/AppContainer";
+import { Injectable } from "../../Shared/domain/AppContainer";
 import { EpubToStoryUseCase } from "./EpubToStoryUseCase";
 import { StoryToMp3UseCase } from "./StoryToMp3UseCase";
 

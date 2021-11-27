@@ -4,7 +4,7 @@ import { transformerItems } from "../domain/TransformerContainer";
 import { EpubReaderImpl } from "./EpubReaderImpl";
 import { TransformerImpl } from "./transformer/TransformerImpl";
 import { TransformerController } from "./transformer.controller";
-import { StoryModule } from "../../story/infra/story.module";
+import { StoryModule } from "../../Story/infra/story.module";
 import { StoryToMp3UseCase } from "../use-cases/StoryToMp3UseCase";
 import { EpubToMp3UseCase } from "../use-cases/EpubToMp3UseCase";
 

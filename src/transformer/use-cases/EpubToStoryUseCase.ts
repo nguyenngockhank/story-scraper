@@ -1,4 +1,4 @@
-import { Injectable, Inject } from "../../shared/domain/AppContainer";
+import { Injectable, Inject } from "../../Shared/domain/AppContainer";
 import { Transformer } from "../domain/Transformer";
 import { transformerItems } from "../domain/TransformerContainer";
 
