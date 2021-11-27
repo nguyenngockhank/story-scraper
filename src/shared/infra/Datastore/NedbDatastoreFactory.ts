@@ -10,7 +10,6 @@ export interface NedbDatastore<T> extends MyDatastore<T> {
 @Injectable()
 export class NedbDatastoreFactory {
   create<T>(options: { path: string }): NedbDatastore<T> {
-    // console.log(">>> create instance NedbDatastore", options, Datastore);
     const db = new Datastore({
       filename: options.path,
       autoload: true,

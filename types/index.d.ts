@@ -1,5 +1,6 @@
 declare module "html-to-text" {
   type ConvertOptions = {
+    ignoreImage?: boolean;
     wordwrap: number;
   };
   interface HtmlToText {
