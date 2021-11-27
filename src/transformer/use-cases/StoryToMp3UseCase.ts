@@ -9,8 +9,8 @@ export class StoryToMp3UseCase {
     private transformer: Transformer,
   ) {}
 
-  execute(story: string): Promise<string[]> {
-    console.log("process story to mp3 ", story);
-    return this.transformer.storyToMp3(story);
+  execute(story: string, fromChapter = 1): Promise<string[]> {
+    console.log("process story to mp3 ", story, " fromChapter ", fromChapter);
+    return this.transformer.storyToMp3(story, fromChapter);
   }
 }
