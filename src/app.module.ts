@@ -7,6 +7,8 @@ import { appItems } from "./shared/domain/AppContainer";
 import { NedbDatastoreFactory } from "./shared/infra/Datastore/NedbDatastoreFactory";
 import { AxiosScraper } from "./shared/infra/Scraper/AxiosScraper";
 import { Finder } from "./shared/domain/Finder";
+import { DownloaderImpl } from "./shared/infra/DownloaderImpl";
+import { Mp3ProcessorImpl } from "./shared/infra/Mp3Processor/Mp3ProcessorImpl";
 
 @Global()
 @Module({
@@ -20,6 +22,14 @@ import { Finder } from "./shared/domain/Finder";
       provide: appItems.Scraper,
       useClass: AxiosScraper,
     },
+    {
+      provide: appItems.Downloader,
+      useClass: DownloaderImpl,
+    },
+    {
+      provide: appItems.Mp3Processor,
+      useClass: Mp3ProcessorImpl,
+    },
   ],
   exports: [
     NedbDatastoreFactory,
@@ -27,6 +37,14 @@ import { Finder } from "./shared/domain/Finder";
     {
       provide: appItems.Scraper,
       useClass: AxiosScraper,
+    },
+    {
+      provide: appItems.Downloader,
+      useClass: DownloaderImpl,
+    },
+    {
+      provide: appItems.Mp3Processor,
+      useClass: Mp3ProcessorImpl,
     },
   ],
 })

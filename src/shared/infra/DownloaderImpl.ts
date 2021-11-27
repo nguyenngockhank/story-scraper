@@ -1,13 +1,13 @@
 import axios from "axios";
 import * as retry from "retry";
 import * as fs from "fs";
-import chunk from "lodash/chunk";
+import { chunk } from "lodash";
 import { Downloader, DownloadItem } from "../domain/Downloader";
 
 export class DownloaderImpl implements Downloader {
   private batch = 10;
   async downloadItem(item: DownloadItem): Promise<void> {
-    await this.downloadAudio(item.output, item.url);
+    await this.download(item.output, item.url);
   }
 
   async downloadItems(items: DownloadItem[]): Promise<void> {
@@ -15,12 +15,13 @@ export class DownloaderImpl implements Downloader {
 
     for (const items of batches) {
       await Promise.all(
-        items.map((item) => this.downloadAudio(item.output, item.url)),
+        items.map((item) => this.download(item.output, item.url)),
       );
     }
   }
 
-  private async downloadAudio(outputPath: string, url: string): Promise<void> {
+  private async download(outputPath: string, url: string): Promise<void> {
+    // console.log("Download item: " + url + " to " + outputPath);
     const operation = retry.operation({
       retries: 5,
       factor: 3,

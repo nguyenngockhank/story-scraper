@@ -397,4 +397,7 @@ Temporary Items
 .env
 dist
 db/*
+!db/index.html
+audio/*
+!audio/index.html
 football/*
