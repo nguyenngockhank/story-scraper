@@ -1,5 +1,5 @@
 import { Injectable } from "../../domain/AppContainer";
-import { Scraper } from "../../domain/Scraper";
+import { Scraper, ScraperOptions } from "../../domain/Scraper";
 import * as retry from "retry";
 import * as axios from "axios";
 import cheerio, { CheerioAPI } from "cheerio";
@@ -7,8 +7,8 @@ import { Operation } from "retry";
 
 @Injectable()
 export class AxiosScraper implements Scraper {
-  fetch(url: string): Promise<string> {
-    const operation = this.getRetryOperation();
+  fetch(url: string, options?: ScraperOptions): Promise<string> {
+    const operation = this.getRetryOperation(options);
 
     return new Promise((resolve, reject) => {
       operation.attempt(async function (currentAttempt) {
@@ -26,20 +26,26 @@ export class AxiosScraper implements Scraper {
           const data = <string>response.data;
           resolve(data);
         } catch (err) {
-          operation.retry(err);
+          const canRetry = operation.retry(err);
+          if (!canRetry) {
+            reject(err);
+          }
         }
       });
     });
   }
 
-  async fetchWrappedDOM(url: string): Promise<CheerioAPI> {
-    const html = await this.fetch(url);
+  async fetchWrappedDOM(
+    url: string,
+    options?: ScraperOptions,
+  ): Promise<CheerioAPI> {
+    const html = await this.fetch(url, options);
     return cheerio.load(html);
   }
 
-  private getRetryOperation(): Operation {
+  private getRetryOperation(options?: ScraperOptions): Operation {
     const operation = retry.operation({
-      retries: 5,
+      retries: options.retryAttempt || 5,
       factor: 3,
       minTimeout: 1 * 1000,
       maxTimeout: 60 * 1000,

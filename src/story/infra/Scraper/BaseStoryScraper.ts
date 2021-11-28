@@ -3,15 +3,17 @@ import { Chapter } from "../../domain/Chapter";
 import { ChapterContent } from "../../domain/ChapterContent";
 import { StoryRepository } from "../../domain/StoryRepository";
 import { StoryScraper } from "../../domain/Scraper/StoryScraper";
-import { Node } from "domhandler";
 export type ScraperOptions = {
   baseUrl: string;
   maxChaptersPerPage?: number;
+  reverseChapters?: boolean;
   selectors: {
     chapterContent: string;
-    chapterContainter: string;
+    chapterItems: string;
   };
 };
+
+export type ChapterWithoutIndex = Omit<Chapter, "index">;
 
 export abstract class BaseStoryScraper implements StoryScraper {
   protected scraperOptions: ScraperOptions;
@@ -28,23 +30,27 @@ export abstract class BaseStoryScraper implements StoryScraper {
     }
 
     // start scraping
-    const chapters: Chapter[] = [];
+    const chaptersWithoutIndexes: ChapterWithoutIndex[] = [];
     let continueScraping = false;
     let pageIndex = 1;
-    let itemIndex = 1;
     do {
-      const newItems = await this.scrapeChaptersOnPage(
-        story,
-        pageIndex,
-        itemIndex,
-      );
-      chapters.push(...newItems);
-      itemIndex += newItems.length;
+      const newItems = await this.scrapeChaptersOnPage(story, pageIndex);
+      chaptersWithoutIndexes.push(...newItems);
       pageIndex++;
       continueScraping =
         newItems.length === this.scraperOptions.maxChaptersPerPage;
     } while (continueScraping);
     // end scraping
+
+    // format index
+    let chapterIndex = 1;
+    if (this.scraperOptions.reverseChapters) {
+      chaptersWithoutIndexes.reverse();
+    }
+    const chapters = chaptersWithoutIndexes.map((c) => ({
+      ...c,
+      index: chapterIndex++,
+    }));
 
     await this.storyRepository.saveChapterList(story, chapters);
     return chapters;
@@ -53,26 +59,23 @@ export abstract class BaseStoryScraper implements StoryScraper {
   protected async scrapeChaptersOnPage(
     story: string,
     pageIndex: number,
-    startItemIndex: number,
-  ): Promise<Chapter[]> {
+  ): Promise<ChapterWithoutIndex[]> {
     const chapterUrl = this.chapterUrl(story, pageIndex);
-    const $ = await this.scraper.fetchWrappedDOM(chapterUrl);
-
-    let index = startItemIndex;
-    const chapters: Chapter[] = [];
-    $(this.scraperOptions.selectors.chapterContainter).each((i, el) => {
-      const chapter = this.nodeToChapter($(el));
-      chapters.push({
-        ...chapter,
-        index: index++,
+    const chapters: ChapterWithoutIndex[] = [];
+    try {
+      const $ = await this.scraper.fetchWrappedDOM(chapterUrl);
+      $(this.scraperOptions.selectors.chapterItems).each((i, el) => {
+        const chapter = this.nodeToChapter($(el));
+        chapters.push(chapter);
       });
-    });
-    return chapters;
+    } finally {
+      return chapters;
+    }
   }
 
   abstract chapterUrl(story: string, pageIndex: number): string;
 
-  abstract nodeToChapter($el: WrappedNode): Omit<Chapter, "index">;
+  abstract nodeToChapter($el: WrappedNode): ChapterWithoutIndex;
 
   async fetchChapterContents(story: string): Promise<ChapterContent[]> {
     const chapters: Chapter[] = await this.storyRepository.getChapterList(

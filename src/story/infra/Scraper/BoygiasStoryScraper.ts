@@ -10,13 +10,14 @@ import { StoryRepository } from "../../domain/StoryRepository";
 import { BaseStoryScraper, ScraperOptions } from "./BaseStoryScraper";
 
 @Injectable()
-export class TruyenfullStoryScraper extends BaseStoryScraper {
+export class BoygiasStoryScraper extends BaseStoryScraper {
   protected scraperOptions: ScraperOptions = {
-    baseUrl: "https://truyenfull.vn/",
-    maxChaptersPerPage: 50,
+    baseUrl: "https://boygias.com",
+    maxChaptersPerPage: 10,
+    reverseChapters: true,
     selectors: {
-      chapterContent: ".chapter-c",
-      chapterItems: ".list-chapter li",
+      chapterContent: ".post-content",
+      chapterItems: ".content-wrapper .articles article",
     },
   };
 
@@ -31,13 +32,16 @@ export class TruyenfullStoryScraper extends BaseStoryScraper {
   }
 
   chapterUrl(story: string, pageIndex: number): string {
-    return `${this.scraperOptions.baseUrl}/${story}/trang-${pageIndex}`;
+    if (pageIndex > 1) {
+      return `${this.scraperOptions.baseUrl}/series/${story}/page/${pageIndex}/`;
+    }
+    return `${this.scraperOptions.baseUrl}/series/${story}/`;
   }
 
   nodeToChapter($el: WrappedNode): Omit<Chapter, "index"> {
     return {
-      url: $el.find("a").attr("href").trim(),
-      title: $el.text().trim(),
+      url: $el.find("h1 a").attr("href").trim(),
+      title: $el.find("h1 a").text().trim(),
     };
   }
 }

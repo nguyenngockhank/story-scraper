@@ -3,12 +3,17 @@ import { map } from "lodash";
 import { TruyenfullStoryScraper } from "./TruyenfullStoryScraper";
 import { Injectable } from "../../../Shared/domain/AppContainer";
 import { StoryScraperRepository } from "../../domain/Scraper/StoryScraperRepository";
+import { BoygiasStoryScraper } from "./BoygiasStoryScraper";
 
 @Injectable()
 export class MemoryStoryScraperRepository implements StoryScraperRepository {
   private scraperMapping: Record<string, StoryScraper> = {};
-  constructor(truyenfullScraper: TruyenfullStoryScraper) {
+  constructor(
+    truyenfullScraper: TruyenfullStoryScraper,
+    boygiasScraper: BoygiasStoryScraper,
+  ) {
     this.scraperMapping["truyenfull"] = truyenfullScraper;
+    this.scraperMapping["boygias"] = boygiasScraper;
   }
 
   getScraperByUrl(url: string): StoryScraper {

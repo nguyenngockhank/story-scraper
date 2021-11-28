@@ -15,7 +15,7 @@ declare module "retry" {
 
   export type Operation = {
     attempt(callback: AttemptCallback): void;
-    retry(err: Error): void;
+    retry(err: Error): boolean;
   };
 
   type RetryOperationOptions = {

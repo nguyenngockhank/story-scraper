@@ -5,6 +5,7 @@ import { TruyenfullStoryScraper } from "./Scraper/TruyenfullStoryScraper";
 import { MemoryStoryScraperRepository } from "./Scraper/MemoryStoryScraperRepository";
 import { ScrapeStoryUseCase } from "../use-cases/ScrapeStoryUseCase";
 import { StoryController } from "./story.controller";
+import { BoygiasStoryScraper } from "./Scraper/BoygiasStoryScraper";
 
 @Module({
   controllers: [StoryController],
@@ -15,6 +16,7 @@ import { StoryController } from "./story.controller";
     },
     // story scraper
     TruyenfullStoryScraper,
+    BoygiasStoryScraper,
     {
       provide: storyItems.StoryScraperRepository,
       useClass: MemoryStoryScraperRepository,
