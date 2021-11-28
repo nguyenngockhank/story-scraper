@@ -1,12 +1,25 @@
 import { Controller, Post, Body } from "@nestjs/common";
-import { ScrapeStoryUseCase } from "../use-cases/ScrapeStoryUseCase";
+import { ScrapeStoryByUrlUseCase } from "../use-cases/ScrapeStoryByUrlUseCase";
+import { ScrapeStoryByProviderUseCase } from "../use-cases/ScrapeStoryByProviderUseCase";
 
 @Controller()
 export class StoryController {
-  constructor(private scrapeStoryUseCase: ScrapeStoryUseCase) {}
+  constructor(
+    private scrapeStoryByProviderUC: ScrapeStoryByProviderUseCase,
+    private scrapeStoryByUrlUC: ScrapeStoryByUrlUseCase,
+  ) {}
 
   @Post("api/story/scrape")
-  scrapeStory(@Body() payload: { story: string; provider: string }) {
-    return this.scrapeStoryUseCase.execute(payload.provider, payload.story);
+  scrapeStory(
+    @Body() payload: { story: string; provider: string; url: string },
+  ) {
+    if (payload.url) {
+      return this.scrapeStoryByUrlUC.execute(payload.url);
+    }
+
+    return this.scrapeStoryByProviderUC.execute(
+      payload.provider,
+      payload.story,
+    );
   }
 }

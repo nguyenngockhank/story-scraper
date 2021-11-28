@@ -10,14 +10,13 @@ import { StoryRepository } from "../../domain/StoryRepository";
 import { BaseStoryScraper, ScraperOptions } from "./BaseStoryScraper";
 
 @Injectable()
-export class BoygiasStoryScraper extends BaseStoryScraper {
+export class SstruyenStoryScraper extends BaseStoryScraper {
   protected scraperOptions: ScraperOptions = {
-    baseUrl: "https://boygias.com",
-    maxChaptersPerPage: 10,
-    reverseChapters: true,
+    baseUrl: "https://sstruyen.com",
+    maxChaptersPerPage: 32,
     selectors: {
-      chapterContent: ".post-content",
-      chapterItems: ".content-wrapper .articles article",
+      chapterContent: ".content.container1",
+      chapterItems: ".list-chap li",
     },
   };
 
@@ -32,16 +31,22 @@ export class BoygiasStoryScraper extends BaseStoryScraper {
   }
 
   chapterUrl(story: string, pageIndex: number): string {
-    if (pageIndex > 1) {
-      return `${this.scraperOptions.baseUrl}/series/${story}/page/${pageIndex}/`;
+    if (pageIndex === 1) {
+      return `${this.scraperOptions.baseUrl}/${story}/`;
     }
-    return `${this.scraperOptions.baseUrl}/series/${story}/`;
+    return `${this.scraperOptions.baseUrl}/${story}/trang-${pageIndex}/`;
   }
 
   nodeToChapter(story: string, $el: WrappedNode): Omit<Chapter, "index"> {
+    let chapterUrl = $el.find("a").attr("href").trim();
+    // fill prefix
+    if (!chapterUrl.startsWith(`/${story}/`)) {
+      chapterUrl = `/${story}/${chapterUrl}`;
+    }
+
     return {
-      url: $el.find("h1 a").attr("href").trim(),
-      title: $el.find("h1 a").text().trim(),
+      url: `${this.scraperOptions.baseUrl}${chapterUrl}`,
+      title: $el.find("a").text().trim(),
     };
   }
 }

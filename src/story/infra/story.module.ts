@@ -3,9 +3,11 @@ import { NedbStoryRepository } from "./NedbStoryRepository";
 import { storyItems } from "../domain/StoryContainer";
 import { TruyenfullStoryScraper } from "./Scraper/TruyenfullStoryScraper";
 import { MemoryStoryScraperRepository } from "./Scraper/MemoryStoryScraperRepository";
-import { ScrapeStoryUseCase } from "../use-cases/ScrapeStoryUseCase";
+import { ScrapeStoryByProviderUseCase } from "../use-cases/ScrapeStoryByProviderUseCase";
 import { StoryController } from "./story.controller";
 import { BoygiasStoryScraper } from "./Scraper/BoygiasStoryScraper";
+import { ScrapeStoryByUrlUseCase } from "../use-cases/ScrapeStoryByUrlUseCase";
+import { SstruyenStoryScraper } from "./Scraper/SstruyenStoryScraper";
 
 @Module({
   controllers: [StoryController],
@@ -16,12 +18,14 @@ import { BoygiasStoryScraper } from "./Scraper/BoygiasStoryScraper";
     },
     // story scraper
     TruyenfullStoryScraper,
+    SstruyenStoryScraper,
     BoygiasStoryScraper,
     {
       provide: storyItems.StoryScraperRepository,
       useClass: MemoryStoryScraperRepository,
     },
-    ScrapeStoryUseCase,
+    ScrapeStoryByProviderUseCase,
+    ScrapeStoryByUrlUseCase,
   ],
   exports: [
     {

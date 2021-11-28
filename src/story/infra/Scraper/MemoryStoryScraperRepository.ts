@@ -4,6 +4,7 @@ import { TruyenfullStoryScraper } from "./TruyenfullStoryScraper";
 import { Injectable } from "../../../Shared/domain/AppContainer";
 import { StoryScraperRepository } from "../../domain/Scraper/StoryScraperRepository";
 import { BoygiasStoryScraper } from "./BoygiasStoryScraper";
+import { SstruyenStoryScraper } from "./SstruyenStoryScraper";
 
 @Injectable()
 export class MemoryStoryScraperRepository implements StoryScraperRepository {
@@ -11,9 +12,11 @@ export class MemoryStoryScraperRepository implements StoryScraperRepository {
   constructor(
     truyenfullScraper: TruyenfullStoryScraper,
     boygiasScraper: BoygiasStoryScraper,
+    sstruyenScraper: SstruyenStoryScraper,
   ) {
     this.scraperMapping["truyenfull"] = truyenfullScraper;
     this.scraperMapping["boygias"] = boygiasScraper;
+    this.scraperMapping["sstruyen"] = sstruyenScraper;
   }
 
   getScraperByUrl(url: string): StoryScraper {

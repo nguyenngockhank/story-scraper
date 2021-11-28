@@ -5,4 +5,5 @@ import { Story } from "../StoryRepository";
 export interface StoryScraper {
   fetchChapters(story: string): Promise<Chapter[]>;
   fetchChapterContents(story: Story): Promise<ChapterContent[]>;
+  extractStory(url: string): string;
 }

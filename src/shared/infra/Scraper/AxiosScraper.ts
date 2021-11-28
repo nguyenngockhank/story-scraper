@@ -45,7 +45,7 @@ export class AxiosScraper implements Scraper {
 
   private getRetryOperation(options?: ScraperOptions): Operation {
     const operation = retry.operation({
-      retries: options.retryAttempt || 5,
+      retries: options?.retryAttempt || 5,
       factor: 3,
       minTimeout: 1 * 1000,
       maxTimeout: 60 * 1000,

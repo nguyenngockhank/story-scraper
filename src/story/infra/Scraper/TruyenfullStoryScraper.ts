@@ -34,7 +34,7 @@ export class TruyenfullStoryScraper extends BaseStoryScraper {
     return `${this.scraperOptions.baseUrl}/${story}/trang-${pageIndex}`;
   }
 
-  nodeToChapter($el: WrappedNode): Omit<Chapter, "index"> {
+  nodeToChapter(story: string, $el: WrappedNode): Omit<Chapter, "index"> {
     return {
       url: $el.find("a").attr("href").trim(),
       title: $el.text().trim(),

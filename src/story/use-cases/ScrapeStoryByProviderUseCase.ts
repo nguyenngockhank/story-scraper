@@ -2,7 +2,7 @@ import { Inject } from "../../Shared/domain/AppContainer";
 import { StoryScraperRepository } from "../domain/Scraper/StoryScraperRepository";
 import { storyItems } from "../domain/StoryContainer";
 
-export class ScrapeStoryUseCase {
+export class ScrapeStoryByProviderUseCase {
   constructor(
     @Inject(storyItems.StoryScraperRepository)
     private scraperRepo: StoryScraperRepository,
