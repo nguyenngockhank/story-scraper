@@ -10,8 +10,9 @@ export class ScrapeStoryByUrlUseCase {
   async execute(url: string): Promise<void> {
     const scraper = this.scraperRepo.getScraperByUrl(url);
     const story = scraper.extractStory(url);
+    const metaData = scraper.extractStoryMetadata(url);
 
-    await scraper.fetchChapters(story);
-    await scraper.fetchChapterContents(story);
+    await scraper.fetchChapters(story, metaData);
+    await scraper.fetchChapterContents(story, metaData);
   }
 }

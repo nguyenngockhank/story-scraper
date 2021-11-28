@@ -7,7 +7,11 @@ import { Scraper, WrappedNode } from "../../../Shared/domain/Scraper";
 import { Chapter } from "../../domain/Chapter";
 import { storyItems } from "../../domain/StoryContainer";
 import { StoryRepository } from "../../domain/StoryRepository";
-import { BaseStoryScraper, ScraperOptions } from "./BaseStoryScraper";
+import {
+  BaseStoryScraper,
+  ScraperOptions,
+  StoryContext,
+} from "./BaseStoryScraper";
 
 @Injectable()
 export class BoygiasStoryScraper extends BaseStoryScraper {
@@ -31,11 +35,12 @@ export class BoygiasStoryScraper extends BaseStoryScraper {
     super(scraper, storyRepository);
   }
 
-  chapterUrl(story: string, pageIndex: number): string {
+  chapterUrl(storyContext: StoryContext, pageIndex: number): string {
+    const { storyName } = storyContext;
     if (pageIndex > 1) {
-      return `${this.scraperOptions.baseUrl}/series/${story}/page/${pageIndex}/`;
+      return `${this.scraperOptions.baseUrl}/series/${storyName}/page/${pageIndex}/`;
     }
-    return `${this.scraperOptions.baseUrl}/series/${story}/`;
+    return `${this.scraperOptions.baseUrl}/series/${storyName}/`;
   }
 
   nodeToChapter(story: string, $el: WrappedNode): Omit<Chapter, "index"> {

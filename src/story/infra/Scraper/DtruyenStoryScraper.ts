@@ -14,13 +14,13 @@ import {
 } from "./BaseStoryScraper";
 
 @Injectable()
-export class TruyenfullStoryScraper extends BaseStoryScraper {
+export class DtruyenStoryScraper extends BaseStoryScraper {
   protected scraperOptions: ScraperOptions = {
-    baseUrl: "https://truyenfull.vn/",
-    maxChaptersPerPage: 50,
+    baseUrl: "https://dtruyen.com",
+    maxChaptersPerPage: 30,
     selectors: {
-      chapterContent: ".chapter-c",
-      chapterItems: ".list-chapter li",
+      chapterContent: "#chapter-content",
+      chapterItems: "#chapters .chapters li",
     },
   };
 
@@ -35,13 +35,17 @@ export class TruyenfullStoryScraper extends BaseStoryScraper {
   }
 
   chapterUrl(storyContext: StoryContext, pageIndex: number): string {
-    return `${this.scraperOptions.baseUrl}/${storyContext.storyName}/trang-${pageIndex}`;
+    const { storyName } = storyContext;
+    if (pageIndex === 1) {
+      return `${this.scraperOptions.baseUrl}/${storyName}/`;
+    }
+    return `${this.scraperOptions.baseUrl}/${storyName}/${pageIndex}/`;
   }
 
   nodeToChapter(story: string, $el: WrappedNode): Omit<Chapter, "index"> {
     return {
       url: $el.find("a").attr("href").trim(),
-      title: $el.text().trim(),
+      title: $el.find("a").text().trim(),
     };
   }
 }

@@ -5,6 +5,7 @@ import {
 } from "../../../Shared/domain/AppContainer";
 import { Scraper, WrappedNode } from "../../../Shared/domain/Scraper";
 import { Chapter } from "../../domain/Chapter";
+import { StoryMetaData } from "../../domain/Scraper/StoryScraper";
 import { storyItems } from "../../domain/StoryContainer";
 import { StoryRepository } from "../../domain/StoryRepository";
 import {
@@ -14,13 +15,13 @@ import {
 } from "./BaseStoryScraper";
 
 @Injectable()
-export class TruyenfullStoryScraper extends BaseStoryScraper {
+export class TienhiepStoryScraper extends BaseStoryScraper {
   protected scraperOptions: ScraperOptions = {
-    baseUrl: "https://truyenfull.vn/",
+    baseUrl: "https://tienhiep.net",
     maxChaptersPerPage: 50,
     selectors: {
-      chapterContent: ".chapter-c",
-      chapterItems: ".list-chapter li",
+      chapterContent: ".chapter-content",
+      chapterItems: ".table-striped td",
     },
   };
 
@@ -34,13 +35,27 @@ export class TruyenfullStoryScraper extends BaseStoryScraper {
     super(scraper, storyRepository);
   }
 
+  extractStoryMetadata(url: string): StoryMetaData {
+    // e.g: https://tienhiep.net/truyen/11539/khien-em-ga-cho-anh
+    const parts = url.split("/");
+    const storyId = parts[parts.length - 2];
+    return {
+      storyId,
+    };
+  }
+
   chapterUrl(storyContext: StoryContext, pageIndex: number): string {
-    return `${this.scraperOptions.baseUrl}/${storyContext.storyName}/trang-${pageIndex}`;
+    const { storyName, metaData } = storyContext;
+    if (!metaData.storyId) {
+      throw new Error("Expect storyId in metaData");
+    }
+    return `${this.scraperOptions.baseUrl}/danh-sach-chuong/${metaData.storyId}/${storyName}?page=${pageIndex}`;
   }
 
   nodeToChapter(story: string, $el: WrappedNode): Omit<Chapter, "index"> {
+    const chapterUrl = $el.find("a").attr("href").trim();
     return {
-      url: $el.find("a").attr("href").trim(),
+      url: this.scraperOptions.baseUrl + chapterUrl,
       title: $el.text().trim(),
     };
   }

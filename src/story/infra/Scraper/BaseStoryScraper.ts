@@ -2,7 +2,8 @@ import { Scraper, WrappedNode } from "../../../Shared/domain/Scraper";
 import { Chapter } from "../../domain/Chapter";
 import { ChapterContent } from "../../domain/ChapterContent";
 import { StoryRepository } from "../../domain/StoryRepository";
-import { StoryScraper } from "../../domain/Scraper/StoryScraper";
+import { StoryMetaData, StoryScraper } from "../../domain/Scraper/StoryScraper";
+import { chunk } from "lodash";
 export type ScraperOptions = {
   baseUrl: string;
   maxChaptersPerPage?: number;
@@ -15,6 +16,11 @@ export type ScraperOptions = {
 
 export type ChapterWithoutIndex = Omit<Chapter, "index">;
 
+export type StoryContext = {
+  storyName: string;
+  metaData?: StoryMetaData;
+};
+
 export abstract class BaseStoryScraper implements StoryScraper {
   protected scraperOptions: ScraperOptions;
 
@@ -22,6 +28,7 @@ export abstract class BaseStoryScraper implements StoryScraper {
     protected scraper: Scraper,
     protected storyRepository: StoryRepository,
   ) {}
+
   extractStory(url: string): string {
     if (url.endsWith("/")) {
       url = url.slice(0, -1); // remove last char
@@ -30,18 +37,30 @@ export abstract class BaseStoryScraper implements StoryScraper {
     return parts[parts.length - 1];
   }
 
-  async fetchChapters(story: string): Promise<Chapter[]> {
+  extractStoryMetadata(url: string): StoryMetaData {
+    return {};
+  }
+
+  async fetchChapters(
+    story: string,
+    metaData?: StoryMetaData,
+  ): Promise<Chapter[]> {
     const data: Chapter[] = await this.storyRepository.getChapterList(story);
     if (data && data.length > 0) {
       return data;
     }
+
+    const storyContext: StoryContext = {
+      storyName: story,
+      metaData: metaData,
+    };
 
     // start scraping
     const chaptersWithoutIndexes: ChapterWithoutIndex[] = [];
     let continueScraping = false;
     let pageIndex = 1;
     do {
-      const newItems = await this.scrapeChaptersOnPage(story, pageIndex);
+      const newItems = await this.scrapeChaptersOnPage(storyContext, pageIndex);
       chaptersWithoutIndexes.push(...newItems);
       pageIndex++;
       continueScraping =
@@ -64,17 +83,18 @@ export abstract class BaseStoryScraper implements StoryScraper {
   }
 
   protected async scrapeChaptersOnPage(
-    story: string,
+    storyContext: StoryContext,
     pageIndex: number,
   ): Promise<ChapterWithoutIndex[]> {
-    const chapterUrl = this.chapterUrl(story, pageIndex);
+    const { storyName } = storyContext;
+    const chapterUrl = this.chapterUrl(storyContext, pageIndex);
     const chapters: ChapterWithoutIndex[] = [];
     try {
       const $ = await this.scraper.fetchWrappedDOM(chapterUrl, {
         retryAttempt: 1,
       });
       $(this.scraperOptions.selectors.chapterItems).each((i, el) => {
-        const chapter = this.nodeToChapter(story, $(el));
+        const chapter = this.nodeToChapter(storyName, $(el));
         chapters.push(chapter);
       });
     } finally {
@@ -82,7 +102,7 @@ export abstract class BaseStoryScraper implements StoryScraper {
     }
   }
 
-  abstract chapterUrl(story: string, pageIndex: number): string;
+  abstract chapterUrl(storyContext: StoryContext, pageIndex: number): string;
 
   abstract nodeToChapter(story: string, $el: WrappedNode): ChapterWithoutIndex;
 
@@ -90,9 +110,16 @@ export abstract class BaseStoryScraper implements StoryScraper {
     const chapters: Chapter[] = await this.storyRepository.getChapterList(
       story,
     );
-    return Promise.all(
-      chapters.map((chapter) => this.fetchChapterContent(story, chapter)),
-    );
+
+    const result: ChapterContent[] = [];
+    const batches = chunk(chapters, 10);
+    for (const batch of batches) {
+      const batchResult: ChapterContent[] = await Promise.all(
+        batch.map((c) => this.fetchChapterContent(story, c)),
+      );
+      result.push(...batchResult);
+    }
+    return result;
   }
 
   async fetchChapterContent(

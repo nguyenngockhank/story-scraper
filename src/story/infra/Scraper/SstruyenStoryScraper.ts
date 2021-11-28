@@ -7,7 +7,11 @@ import { Scraper, WrappedNode } from "../../../Shared/domain/Scraper";
 import { Chapter } from "../../domain/Chapter";
 import { storyItems } from "../../domain/StoryContainer";
 import { StoryRepository } from "../../domain/StoryRepository";
-import { BaseStoryScraper, ScraperOptions } from "./BaseStoryScraper";
+import {
+  BaseStoryScraper,
+  ScraperOptions,
+  StoryContext,
+} from "./BaseStoryScraper";
 
 @Injectable()
 export class SstruyenStoryScraper extends BaseStoryScraper {
@@ -30,11 +34,12 @@ export class SstruyenStoryScraper extends BaseStoryScraper {
     super(scraper, storyRepository);
   }
 
-  chapterUrl(story: string, pageIndex: number): string {
+  chapterUrl(storyContext: StoryContext, pageIndex: number): string {
+    const { storyName } = storyContext;
     if (pageIndex === 1) {
-      return `${this.scraperOptions.baseUrl}/${story}/`;
+      return `${this.scraperOptions.baseUrl}/${storyName}/`;
     }
-    return `${this.scraperOptions.baseUrl}/${story}/trang-${pageIndex}/`;
+    return `${this.scraperOptions.baseUrl}/${storyName}/trang-${pageIndex}/`;
   }
 
   nodeToChapter(story: string, $el: WrappedNode): Omit<Chapter, "index"> {
