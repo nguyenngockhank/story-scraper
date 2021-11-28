@@ -7,9 +7,13 @@ export class ScrapeStoryByProviderUseCase {
     @Inject(storyItems.StoryScraperRepository)
     private scraperRepo: StoryScraperRepository,
   ) {}
-  async execute(provider: string, story: string): Promise<void> {
+  async execute(
+    provider: string,
+    story: string,
+    metadata?: Record<string, string>,
+  ): Promise<void> {
     const scraper = this.scraperRepo.getScraperByName(provider);
-    await scraper.fetchChapters(story);
-    await scraper.fetchChapterContents(story);
+    await scraper.fetchChapters(story, metadata);
+    await scraper.fetchChapterContents(story, metadata);
   }
 }
