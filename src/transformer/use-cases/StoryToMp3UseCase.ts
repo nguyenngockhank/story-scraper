@@ -9,8 +9,10 @@ export class StoryToMp3UseCase {
     private transformer: Transformer,
   ) {}
 
-  execute(story: string, fromChapter = 1): Promise<string[]> {
+  async execute(story: string, fromChapter = 1): Promise<string[]> {
     console.log("process story to mp3 ", story, " fromChapter ", fromChapter);
-    return this.transformer.storyToMp3(story, fromChapter);
+    const result = await this.transformer.storyToMp3(story, fromChapter);
+    console.log("ended process story to mp3", story);
+    return result;
   }
 }

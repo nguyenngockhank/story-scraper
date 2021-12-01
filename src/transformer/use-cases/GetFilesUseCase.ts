@@ -7,6 +7,7 @@ export class GetFilesUseCase {
 
   async execute(
     dir: string,
+    keyword: string,
     extension: string,
     recursive: boolean,
   ): Promise<string[]> {
@@ -14,6 +15,9 @@ export class GetFilesUseCase {
       throw new Error("Dir not exists");
     }
     const files = this.finder.getFiles(dir, extension, recursive);
+    if (keyword) {
+      return files.filter((file) => file.includes(keyword));
+    }
     return files;
   }
 }

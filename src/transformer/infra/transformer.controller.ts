@@ -35,7 +35,8 @@ export class TransformerController {
     @Param("ext") ext = "epub",
     @Query("recursive") recursive = true,
     @Query("dir") dir: string,
+    @Query("keyword") keyword?: string,
   ) {
-    return this.getEpubFilesUC.execute(dir, ext, recursive);
+    return this.getEpubFilesUC.execute(dir, keyword, ext, recursive);
   }
 }
