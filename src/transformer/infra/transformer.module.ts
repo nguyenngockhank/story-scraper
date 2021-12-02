@@ -8,6 +8,7 @@ import { StoryModule } from "../../Story/infra/story.module";
 import { StoryToMp3UseCase } from "../use-cases/StoryToMp3UseCase";
 import { EpubToMp3UseCase } from "../use-cases/EpubToMp3UseCase";
 import { GetFilesUseCase } from "../use-cases/GetFilesUseCase";
+import { EpubsToMp3UseCase } from "../use-cases/EpubsToMp3UseCase";
 
 @Module({
   controllers: [TransformerController],
@@ -17,6 +18,7 @@ import { GetFilesUseCase } from "../use-cases/GetFilesUseCase";
     EpubToStoryUseCase,
     StoryToMp3UseCase,
     EpubToMp3UseCase,
+    EpubsToMp3UseCase,
     GetFilesUseCase,
 
     // domain & infra

@@ -34,6 +34,10 @@ export class TextToMp3Transfomer {
       lang: outputOptions.lang || "vi",
     });
 
+    if (downloadItems.length === 0) {
+      return;
+    }
+
     await this.downloader.downloadItems(downloadItems);
 
     await this.mp3Processor.merge(
@@ -65,17 +69,22 @@ export class TextToMp3Transfomer {
     content: string,
     options: { tempDir: string; lang: string },
   ): Promise<DownloadItem[]> {
-    const result = await googleTTS
-      .getAllAudioUrls(content, {
-        lang: options.lang,
-        slow: false,
-      })
-      .map((item, i) => {
-        return {
-          ...item,
-          output: this.finder.build(options.tempDir, `${i}.mp3`),
-        };
-      });
-    return result;
+    try {
+      const result = await googleTTS
+        .getAllAudioUrls(content, {
+          lang: options.lang,
+          slow: false,
+        })
+        .map((item, i) => {
+          return {
+            ...item,
+            output: this.finder.build(options.tempDir, `${i}.mp3`),
+          };
+        });
+      return result;
+    } catch (err) {
+      console.warn(err);
+      return [];
+    }
   }
 }

@@ -1,4 +1,5 @@
 import { Controller, Post, Body, Get, Param, Query } from "@nestjs/common";
+import { EpubsToMp3UseCase } from "../use-cases/EpubsToMp3UseCase";
 import { EpubToMp3UseCase } from "../use-cases/EpubToMp3UseCase";
 import { EpubToStoryUseCase } from "../use-cases/EpubToStoryUseCase";
 import { GetFilesUseCase } from "../use-cases/GetFilesUseCase";
@@ -10,6 +11,7 @@ export class TransformerController {
     private epubToStoryUC: EpubToStoryUseCase,
     private storyToMp3UC: StoryToMp3UseCase,
     private epubToMp3UC: EpubToMp3UseCase,
+    private epubsToMp3UC: EpubsToMp3UseCase,
     private getEpubFilesUC: GetFilesUseCase,
   ) {}
 
@@ -28,6 +30,11 @@ export class TransformerController {
   @Post("api/transformer/epub-to-mp3")
   epubToMp3(@Body() payload: { inputFile: string }) {
     return this.epubToMp3UC.execute(payload.inputFile);
+  }
+
+  @Post("api/transformer/epubs-to-mp3")
+  epubsToMp3(@Body() payload: { inputFiles: string[] }) {
+    return this.epubsToMp3UC.execute(payload.inputFiles);
   }
 
   @Get("api/traverse/:ext")
