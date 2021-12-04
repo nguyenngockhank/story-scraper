@@ -43,6 +43,7 @@ export class TextToMp3Transfomer {
     await this.mp3Processor.merge(
       downloadItems.map((item) => item.output),
       outputFile,
+      2,
     );
 
     await this.finder.deleteDir(tempDir);

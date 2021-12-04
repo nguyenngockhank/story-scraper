@@ -50,7 +50,22 @@ export class Finder {
     }
   }
 
+  deleteFile(filePath: string): void {
+    fs.unlinkSync(filePath);
+  }
+
   deleteDir(dir: string): void {
     fs.rmdirSync(dir, { recursive: true });
+  }
+
+  fileName(filePath: string, withExt = true): string {
+    const baseName = path.basename(filePath);
+    if (withExt) {
+      return baseName;
+    }
+    return baseName.split(".").slice(0, -1).join(".");
+  }
+  dirName(filePath: string): string {
+    return path.dirname(filePath);
   }
 }
