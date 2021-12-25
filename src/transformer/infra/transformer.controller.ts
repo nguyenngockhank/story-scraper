@@ -21,10 +21,13 @@ export class TransformerController {
   }
 
   @Post("api/transformer/story-to-mp3")
-  storyToMp3(@Body() payload: { story: string; fromChapter: number }) {
+  storyToMp3(
+    @Body() payload: { story: string; fromChapter: number; tempo?: number },
+  ) {
     const fromChapter =
       Number(payload.fromChapter) > 0 ? Number(payload.fromChapter) : 1;
-    return this.storyToMp3UC.execute(payload.story, fromChapter);
+    const tempo = Number(payload.tempo) > 0 ? Number(payload.tempo) : 1;
+    return this.storyToMp3UC.execute(payload.story, fromChapter, tempo);
   }
 
   @Post("api/transformer/epub-to-mp3")

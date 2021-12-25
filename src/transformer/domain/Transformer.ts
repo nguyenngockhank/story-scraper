@@ -12,7 +12,11 @@ export interface Transformer {
 
   // storyToMp3(story: Story): Promise<Mp3File[]>;
 
-  storyToMp3(story: Story, fromChapter?: number): Promise<FileName[]>;
+  storyToMp3(
+    story: Story,
+    fromChapter?: number,
+    tempo?: number,
+  ): Promise<FileName[]>;
 
   textToMp3(text: string): Promise<void>;
 }

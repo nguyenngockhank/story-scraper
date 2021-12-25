@@ -52,7 +52,11 @@ export class TransformerImpl implements Transformer {
     );
     return story;
   }
-  async storyToMp3(story: string, fromChapter = 1): Promise<FileName[]> {
+  async storyToMp3(
+    story: string,
+    fromChapter = 1,
+    tempo?: number,
+  ): Promise<FileName[]> {
     const chapters = await this.storyRepo.getChapterList(story);
     const processChapters = chapters.filter((c) => c.index >= fromChapter);
 
@@ -71,6 +75,7 @@ export class TransformerImpl implements Transformer {
       await this.textToMp3Transformer.execute(html, {
         fileName: `${chapter.index}.mp3`,
         outputDir: `audio/${story}`,
+        tempo,
       });
 
       result.push(this.finder.build(`audio/${story}`, `${chapter.index}.mp3`));
