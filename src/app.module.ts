@@ -7,10 +7,11 @@ import { AxiosScraper } from "./Shared/infra/Scraper/AxiosScraper";
 import { Finder } from "./Shared/domain/Finder";
 import { DownloaderImpl } from "./Shared/infra/DownloaderImpl";
 import { Mp3ProcessorImpl } from "./Shared/infra/Mp3Processor/Mp3ProcessorImpl";
+import { WalletModule } from "./Wallet/infra/wallet.module";
 
 @Global()
 @Module({
-  imports: [FootballModule, TransformerModule],
+  imports: [FootballModule, TransformerModule, WalletModule],
   providers: [
     NedbDatastoreFactory,
     Finder,
