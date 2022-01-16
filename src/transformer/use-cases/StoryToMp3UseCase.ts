@@ -15,7 +15,10 @@ export class StoryToMp3UseCase {
     tempo?: number,
   ): Promise<string[]> {
     console.log("STARTED process story to mp3:", { fromChapter, story, tempo });
-    const result = await this.transformer.storyToMp3(story, fromChapter, tempo);
+    const result = await this.transformer.storyToMp3(story, {
+      fromChapter,
+      tempo,
+    });
     console.log("ENDED process story to mp3", story);
     return result;
   }

@@ -8,14 +8,20 @@ import { storyItems } from "../../../Story/domain/StoryContainer";
 import { Story, StoryRepository } from "../../../Story/domain/StoryRepository";
 import { EpubReader } from "../../domain/EpubReader";
 import { Mp3Processor } from "../../../Shared/domain/Mp3Processor";
-import { FileName, Transformer } from "../../domain/Transformer";
+import {
+  FileName,
+  StoryToMp3Options,
+  Transformer,
+} from "../../domain/Transformer";
 import { transformerItems } from "../../domain/TransformerContainer";
 import { TextToMp3Transfomer } from "./TextToMp3Transfomer";
 import { Downloader } from "../../../Shared/domain/Downloader";
+import { StoryToMp3Transformer } from "./StoryToMp3Transformer";
 
 @Injectable()
 export class TransformerImpl implements Transformer {
   private textToMp3Transformer: TextToMp3Transfomer;
+  private storyToMp3Transformer: StoryToMp3Transformer;
   constructor(
     private finder: Finder,
 
@@ -35,6 +41,14 @@ export class TransformerImpl implements Transformer {
       this.mp3Processor,
       this.downloader,
     );
+    this.storyToMp3Transformer = new StoryToMp3Transformer(
+      this.storyRepo,
+      this.finder,
+      this.textToMp3Transformer,
+    );
+  }
+  storyToEpub(storyName: string): Promise<string[]> {
+    throw new Error("Method not implemented.");
   }
 
   async epubToStory(inputFile: string): Promise<Story> {
@@ -52,36 +66,12 @@ export class TransformerImpl implements Transformer {
     );
     return story;
   }
+
   async storyToMp3(
     story: string,
-    fromChapter = 1,
-    tempo?: number,
+    options?: StoryToMp3Options,
   ): Promise<FileName[]> {
-    const chapters = await this.storyRepo.getChapterList(story);
-    const processChapters = chapters.filter((c) => c.index >= fromChapter);
-
-    if (processChapters.length === 0) {
-      throw new Error("No chapters found!");
-    }
-
-    const result: FileName[] = [];
-    for (const chapter of processChapters) {
-      const chapterContent = await this.storyRepo.getChapterContent(
-        story,
-        chapter.index,
-      );
-
-      const html = chapterContent.content;
-      await this.textToMp3Transformer.execute(html, {
-        fileName: `${chapter.index}.mp3`,
-        outputDir: `audio/${story}`,
-        tempo,
-      });
-
-      result.push(this.finder.build(`audio/${story}`, `${chapter.index}.mp3`));
-    }
-
-    return result;
+    return this.storyToMp3Transformer.execute(story, options);
   }
   textToMp3(text: string): Promise<void> {
     throw new Error("Method not implemented.");
