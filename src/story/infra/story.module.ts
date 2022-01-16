@@ -10,6 +10,7 @@ import { ScrapeStoryByUrlUseCase } from "../use-cases/ScrapeStoryByUrlUseCase";
 import { SstruyenStoryScraper } from "./Scraper/SstruyenStoryScraper";
 import { TienhiepStoryScraper } from "./Scraper/TienhiepStoryScraper";
 import { DtruyenStoryScraper } from "./Scraper/DtruyenStoryScraper";
+import { BachngocsachStoryScraper } from "./Scraper/BachngocsachStoryScraper";
 
 @Module({
   controllers: [StoryController],
@@ -24,6 +25,7 @@ import { DtruyenStoryScraper } from "./Scraper/DtruyenStoryScraper";
     BoygiasStoryScraper,
     TienhiepStoryScraper,
     DtruyenStoryScraper,
+    BachngocsachStoryScraper,
     {
       provide: storyItems.StoryScraperRepository,
       useClass: MemoryStoryScraperRepository,

@@ -7,6 +7,7 @@ import { BoygiasStoryScraper } from "./Scraper/BoygiasStoryScraper";
 import { SstruyenStoryScraper } from "./Scraper/SstruyenStoryScraper";
 import { TienhiepStoryScraper } from "./Scraper/TienhiepStoryScraper";
 import { DtruyenStoryScraper } from "./Scraper/DtruyenStoryScraper";
+import { BachngocsachStoryScraper } from "./Scraper/BachngocsachStoryScraper";
 
 @Injectable()
 export class MemoryStoryScraperRepository implements StoryScraperRepository {
@@ -17,12 +18,14 @@ export class MemoryStoryScraperRepository implements StoryScraperRepository {
     sstruyenScraper: SstruyenStoryScraper,
     tienhiepScraper: TienhiepStoryScraper,
     dtruyenScraper: DtruyenStoryScraper,
+    bachngocsachStoryScraper: BachngocsachStoryScraper,
   ) {
     this.scraperMapping["truyenfull"] = truyenfullScraper;
     this.scraperMapping["boygias"] = boygiasScraper;
     this.scraperMapping["sstruyen"] = sstruyenScraper;
     this.scraperMapping["tienhiep"] = tienhiepScraper;
     this.scraperMapping["dtruyen"] = dtruyenScraper;
+    this.scraperMapping["bachngocsach"] = bachngocsachStoryScraper;
   }
 
   getScraperByUrl(url: string): StoryScraper {

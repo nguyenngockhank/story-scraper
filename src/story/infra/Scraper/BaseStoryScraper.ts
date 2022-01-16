@@ -37,6 +37,10 @@ export abstract class BaseStoryScraper implements StoryScraper {
     return parts[parts.length - 1];
   }
 
+  protected baseUrl(): string {
+    return this.scraperOptions.baseUrl;
+  }
+
   extractStoryMetadata(url: string): StoryMetaData {
     return {};
   }
@@ -64,7 +68,8 @@ export abstract class BaseStoryScraper implements StoryScraper {
       chaptersWithoutIndexes.push(...newItems);
       pageIndex++;
       continueScraping =
-        newItems.length === this.scraperOptions.maxChaptersPerPage;
+        this.scraperOptions.maxChaptersPerPage &&
+        this.scraperOptions.maxChaptersPerPage === newItems.length;
     } while (continueScraping);
     // end scraping
 

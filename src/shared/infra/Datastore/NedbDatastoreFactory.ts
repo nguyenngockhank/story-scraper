@@ -22,6 +22,7 @@ export class NedbDatastoreFactory {
       findAll: (): Promise<any> => {
         return instance.findMany({});
       },
+      remove: promisify(db.remove).bind(db),
       _nedb: db,
     };
     return instance;

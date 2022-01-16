@@ -26,7 +26,7 @@ export class TransformerController {
   ) {
     const fromChapter =
       Number(payload.fromChapter) > 0 ? Number(payload.fromChapter) : 1;
-    const tempo = Number(payload.tempo) > 0 ? Number(payload.tempo) : 1;
+    const tempo = Number(payload.tempo) > 0 ? Number(payload.tempo) : undefined;
     return this.storyToMp3UC.execute(payload.story, fromChapter, tempo);
   }
 
