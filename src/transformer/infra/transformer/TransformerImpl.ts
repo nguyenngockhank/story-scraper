@@ -10,6 +10,7 @@ import { EpubReader } from "../../domain/EpubReader";
 import { Mp3Processor } from "../../../Shared/domain/Mp3Processor";
 import {
   FileName,
+  StoryToEpubOptions,
   StoryToMp3Options,
   Transformer,
 } from "../../domain/Transformer";
@@ -17,11 +18,13 @@ import { transformerItems } from "../../domain/TransformerContainer";
 import { TextToMp3Transfomer } from "./TextToMp3Transfomer";
 import { Downloader } from "../../../Shared/domain/Downloader";
 import { StoryToMp3Transformer } from "./StoryToMp3Transformer";
+import { StoryToEpubTransformer } from "./StoryToEpubTransformer";
 
 @Injectable()
 export class TransformerImpl implements Transformer {
   private textToMp3Transformer: TextToMp3Transfomer;
   private storyToMp3Transformer: StoryToMp3Transformer;
+  private storyToEpubTransformer: StoryToEpubTransformer;
   constructor(
     private finder: Finder,
 
@@ -46,9 +49,16 @@ export class TransformerImpl implements Transformer {
       this.finder,
       this.textToMp3Transformer,
     );
+    this.storyToEpubTransformer = new StoryToEpubTransformer(
+      this.storyRepo,
+      this.finder,
+    );
   }
-  storyToEpub(storyName: string): Promise<string[]> {
-    throw new Error("Method not implemented.");
+  storyToEpub(
+    storyName: string,
+    options?: StoryToEpubOptions,
+  ): Promise<string[]> {
+    return this.storyToEpubTransformer.execute(storyName, options);
   }
 
   async epubToStory(inputFile: string): Promise<Story> {

@@ -8,6 +8,14 @@ export type GetFilesOptions = {
 };
 
 export class Finder {
+  deleteFile(filePath: string): void {
+    fs.unlinkSync(filePath);
+  }
+
+  writeFile(filePath: string, buffer: Buffer): void {
+    fs.writeFileSync(filePath, buffer);
+  }
+
   build(...args: string[]): string {
     return path.join(...args);
   }
@@ -48,10 +56,6 @@ export class Finder {
         recursive: true,
       });
     }
-  }
-
-  deleteFile(filePath: string): void {
-    fs.unlinkSync(filePath);
   }
 
   deleteDir(dir: string): void {

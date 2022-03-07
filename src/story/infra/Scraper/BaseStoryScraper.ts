@@ -3,7 +3,7 @@ import { Chapter } from "../../domain/Chapter";
 import { ChapterContent } from "../../domain/ChapterContent";
 import { StoryRepository } from "../../domain/StoryRepository";
 import { StoryMetaData, StoryScraper } from "../../domain/Scraper/StoryScraper";
-import { chunk } from "lodash";
+import { chunk } from "../../../Shared/domain/lodash";
 export type ScraperOptions = {
   baseUrl: string;
   maxChaptersPerPage?: number;
@@ -44,7 +44,6 @@ export abstract class BaseStoryScraper implements StoryScraper {
   extractStoryMetadata(url: string): StoryMetaData {
     return {};
   }
-
   async fetchChapters(
     story: string,
     metaData?: StoryMetaData,

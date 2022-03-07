@@ -1,5 +1,4 @@
 import { StoryScraper } from "../domain/Scraper/StoryScraper";
-import { map } from "lodash";
 import { TruyenfullStoryScraper } from "./Scraper/TruyenfullStoryScraper";
 import { Injectable } from "../../Shared/domain/AppContainer";
 import { StoryScraperRepository } from "../domain/Scraper/StoryScraperRepository";
@@ -8,6 +7,7 @@ import { SstruyenStoryScraper } from "./Scraper/SstruyenStoryScraper";
 import { TienhiepStoryScraper } from "./Scraper/TienhiepStoryScraper";
 import { DtruyenStoryScraper } from "./Scraper/DtruyenStoryScraper";
 import { BachngocsachStoryScraper } from "./Scraper/BachngocsachStoryScraper";
+import { map } from "../../Shared/domain/lodash";
 
 @Injectable()
 export class MemoryStoryScraperRepository implements StoryScraperRepository {

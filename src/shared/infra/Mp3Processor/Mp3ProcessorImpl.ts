@@ -32,7 +32,13 @@ export class Mp3ProcessorImpl implements Mp3Processor {
     });
   }
 
-  merge(songs: string[], outputFile: string, tempo?: number): Promise<string> {
+  merge(
+    songs: string[],
+    outputFile: string,
+    tempoInput?: number,
+  ): Promise<string> {
+    const tempo = tempoInput === 1 ? 0 : tempoInput;
+
     const fName = this.finder.fileName(outputFile, false);
     const dName = this.finder.dirName(outputFile);
     const midName = tempo ? `-temp` : "";

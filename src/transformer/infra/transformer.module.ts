@@ -6,6 +6,7 @@ import { TransformerImpl } from "./transformer/TransformerImpl";
 import { TransformerController } from "./transformer.controller";
 import { StoryModule } from "../../Story/infra/story.module";
 import { StoryToMp3UseCase } from "../use-cases/StoryToMp3UseCase";
+import { StoryToEpubUseCase } from "../use-cases/StoryToEpubUseCase";
 import { EpubToMp3UseCase } from "../use-cases/EpubToMp3UseCase";
 import { GetFilesUseCase } from "../use-cases/GetFilesUseCase";
 import { EpubsToMp3UseCase } from "../use-cases/EpubsToMp3UseCase";
@@ -17,6 +18,7 @@ import { EpubsToMp3UseCase } from "../use-cases/EpubsToMp3UseCase";
     // use cases
     EpubToStoryUseCase,
     StoryToMp3UseCase,
+    StoryToEpubUseCase,
     EpubToMp3UseCase,
     EpubsToMp3UseCase,
     GetFilesUseCase,

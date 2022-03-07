@@ -3,6 +3,7 @@ import { EpubsToMp3UseCase } from "../use-cases/EpubsToMp3UseCase";
 import { EpubToMp3UseCase } from "../use-cases/EpubToMp3UseCase";
 import { EpubToStoryUseCase } from "../use-cases/EpubToStoryUseCase";
 import { GetFilesUseCase } from "../use-cases/GetFilesUseCase";
+import { StoryToEpubUseCase } from "../use-cases/StoryToEpubUseCase";
 import { StoryToMp3UseCase } from "../use-cases/StoryToMp3UseCase";
 
 @Controller()
@@ -10,6 +11,7 @@ export class TransformerController {
   constructor(
     private epubToStoryUC: EpubToStoryUseCase,
     private storyToMp3UC: StoryToMp3UseCase,
+    private storyToEpubUC: StoryToEpubUseCase,
     private epubToMp3UC: EpubToMp3UseCase,
     private epubsToMp3UC: EpubsToMp3UseCase,
     private getEpubFilesUC: GetFilesUseCase,
@@ -28,6 +30,13 @@ export class TransformerController {
       Number(payload.fromChapter) > 0 ? Number(payload.fromChapter) : 1;
     const tempo = Number(payload.tempo) > 0 ? Number(payload.tempo) : undefined;
     return this.storyToMp3UC.execute(payload.story, fromChapter, tempo);
+  }
+
+  @Post("api/transformer/story-to-epub")
+  storyToEpub(@Body() payload: { story: string; chapPerFile?: number }) {
+    const chapPerFile =
+      Number(payload.chapPerFile) > 0 ? Number(payload.chapPerFile) : 100;
+    return this.storyToEpubUC.execute(payload.story, chapPerFile);
   }
 
   @Post("api/transformer/epub-to-mp3")

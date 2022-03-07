@@ -1,8 +1,8 @@
 import axios from "axios";
 import * as retry from "retry";
 import * as fs from "fs";
-import { chunk } from "lodash";
 import { Downloader, DownloadItem } from "../domain/Downloader";
+import { chunk } from "../domain/lodash";
 
 export class DownloaderImpl implements Downloader {
   private batch = 10;
