@@ -24,12 +24,27 @@ export class TransformerController {
 
   @Post("api/transformer/story-to-mp3")
   storyToMp3(
-    @Body() payload: { story: string; fromChapter: number; tempo?: number },
+    @Body()
+    payload: {
+      story: string;
+      fromChapter: number;
+      tempo?: number;
+      splitPerFolder?: number;
+    },
   ) {
     const fromChapter =
       Number(payload.fromChapter) > 0 ? Number(payload.fromChapter) : 1;
     const tempo = Number(payload.tempo) > 0 ? Number(payload.tempo) : undefined;
-    return this.storyToMp3UC.execute(payload.story, fromChapter, tempo);
+    const splitPerFolder =
+      Number(payload.splitPerFolder) > 0
+        ? Number(payload.splitPerFolder)
+        : undefined;
+    return this.storyToMp3UC.execute(
+      payload.story,
+      fromChapter,
+      tempo,
+      splitPerFolder,
+    );
   }
 
   @Post("api/transformer/story-to-epub")

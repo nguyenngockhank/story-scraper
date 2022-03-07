@@ -5,6 +5,7 @@ export type FileName = string;
 export type StoryToMp3Options = {
   fromChapter?: number;
   tempo?: number;
+  splitPerFolder?: number;
 };
 
 export type StoryToEpubOptions = {

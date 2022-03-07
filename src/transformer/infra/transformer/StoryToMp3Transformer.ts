@@ -26,21 +26,40 @@ export class StoryToMp3Transformer {
 
     const result: FileName[] = [];
     for (const chapter of processChapters) {
+      const { index } = chapter;
       const chapterContent = await this.storyRepo.getChapterContent(
         story,
-        chapter.index,
+        index,
       );
 
       const html = chapterContent.content;
+
+      const storedPath = this.buildStoredFolder(story, index, options);
       await this.textToMp3Transformer.execute(html, {
-        fileName: `${chapter.index}.mp3`,
-        outputDir: `audio/${story}`,
+        fileName: `${index}.mp3`,
+        outputDir: storedPath,
         tempo,
       });
 
-      result.push(this.finder.build(`audio/${story}`, `${chapter.index}.mp3`));
+      result.push(this.finder.build(storedPath, `${index}.mp3`));
     }
 
     return result;
+  }
+
+  private buildStoredFolder(
+    story: string,
+    chapIndex: number,
+    options?: StoryToMp3Options,
+  ): string {
+    const splitPerFolder = options.splitPerFolder;
+    if (!splitPerFolder) {
+      return `audio/${story}`;
+    }
+
+    const t = Math.floor(chapIndex / splitPerFolder) + 1;
+    const folderIndex = t * splitPerFolder;
+
+    return `audio/${story}/${folderIndex}`;
   }
 }
