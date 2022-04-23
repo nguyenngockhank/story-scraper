@@ -1,3 +1,3 @@
-import { chunk, map, first, last, sortBy } from "lodash";
+import { chunk, map, first, last, sortBy, intersectionBy } from "lodash";
 
-export { chunk, map, first, last, sortBy };
+export { chunk, map, first, last, sortBy, intersectionBy };

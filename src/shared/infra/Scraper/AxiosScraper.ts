@@ -39,6 +39,7 @@ export class AxiosScraper implements Scraper {
     url: string,
     options?: ScraperOptions,
   ): Promise<CheerioAPI> {
+    console.log(">>> fetch url ", url, options);
     const html = await this.fetch(url, options);
     return cheerio.load(html);
   }

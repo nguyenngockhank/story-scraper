@@ -9,6 +9,7 @@ import { BoygiasStoryScraper } from "./Scraper/BoygiasStoryScraper";
 import { ScrapeStoryByUrlUseCase } from "../use-cases/ScrapeStoryByUrlUseCase";
 import { SstruyenStoryScraper } from "./Scraper/SstruyenStoryScraper";
 import { TienhiepStoryScraper } from "./Scraper/TienhiepStoryScraper";
+import { Tienhiep2StoryScraper } from "./Scraper/Tienhiep2StoryScraper";
 import { DtruyenStoryScraper } from "./Scraper/DtruyenStoryScraper";
 import { BachngocsachStoryScraper } from "./Scraper/BachngocsachStoryScraper";
 
@@ -24,6 +25,7 @@ import { BachngocsachStoryScraper } from "./Scraper/BachngocsachStoryScraper";
     SstruyenStoryScraper,
     BoygiasStoryScraper,
     TienhiepStoryScraper,
+    Tienhiep2StoryScraper,
     DtruyenStoryScraper,
     BachngocsachStoryScraper,
     {

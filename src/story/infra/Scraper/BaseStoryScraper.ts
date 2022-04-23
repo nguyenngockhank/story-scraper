@@ -3,7 +3,7 @@ import { Chapter } from "../../domain/Chapter";
 import { ChapterContent } from "../../domain/ChapterContent";
 import { StoryRepository } from "../../domain/StoryRepository";
 import { StoryMetaData, StoryScraper } from "../../domain/Scraper/StoryScraper";
-import { chunk } from "../../../Shared/domain/lodash";
+import { chunk, intersectionBy } from "../../../Shared/domain/lodash";
 export type ScraperOptions = {
   baseUrl: string;
   maxChaptersPerPage?: number;
@@ -64,11 +64,24 @@ export abstract class BaseStoryScraper implements StoryScraper {
     let pageIndex = 1;
     do {
       const newItems = await this.scrapeChaptersOnPage(storyContext, pageIndex);
-      chaptersWithoutIndexes.push(...newItems);
       pageIndex++;
+
       continueScraping =
         this.scraperOptions.maxChaptersPerPage &&
         this.scraperOptions.maxChaptersPerPage === newItems.length;
+      if (continueScraping) {
+        const oldItems = intersectionBy(
+          chaptersWithoutIndexes,
+          newItems,
+          (chap) => chap.url,
+        );
+        console.log("oldItems.length", oldItems.length);
+        if (oldItems.length > 0) {
+          continueScraping = false;
+        }
+      }
+
+      chaptersWithoutIndexes.push(...newItems);
     } while (continueScraping);
     // end scraping
 
