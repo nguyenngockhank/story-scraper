@@ -22,7 +22,7 @@ export class ThichTienHiepStoryScraper extends BaseStoryScraper {
   };
 
   constructor(
-    @Inject(appItems.Scraper)
+    @Inject(appItems.PuppeteerScraper)
     protected scraper: Scraper,
 
     @Inject(storyItems.StoryRepository)

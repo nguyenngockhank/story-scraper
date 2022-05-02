@@ -6,6 +6,7 @@ import { AxiosScraper } from "./Shared/infra/Scraper/AxiosScraper";
 import { Finder } from "./Shared/domain/Finder";
 import { DownloaderImpl } from "./Shared/infra/DownloaderImpl";
 import { Mp3ProcessorImpl } from "./Shared/infra/Mp3Processor/Mp3ProcessorImpl";
+import { PuppeteerScraper } from "./Shared/infra/Scraper/PuppeteerScraper";
 
 @Global()
 @Module({
@@ -16,6 +17,14 @@ import { Mp3ProcessorImpl } from "./Shared/infra/Mp3Processor/Mp3ProcessorImpl";
     {
       provide: appItems.Scraper,
       useClass: AxiosScraper,
+    },
+    {
+      provide: appItems.AxiosScraper,
+      useClass: AxiosScraper,
+    },
+    {
+      provide: appItems.PuppeteerScraper,
+      useClass: PuppeteerScraper,
     },
     {
       provide: appItems.Downloader,
@@ -32,6 +41,14 @@ import { Mp3ProcessorImpl } from "./Shared/infra/Mp3Processor/Mp3ProcessorImpl";
     {
       provide: appItems.Scraper,
       useClass: AxiosScraper,
+    },
+    {
+      provide: appItems.AxiosScraper,
+      useClass: AxiosScraper,
+    },
+    {
+      provide: appItems.PuppeteerScraper,
+      useClass: PuppeteerScraper,
     },
     {
       provide: appItems.Downloader,
