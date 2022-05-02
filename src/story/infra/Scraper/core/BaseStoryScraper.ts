@@ -35,7 +35,7 @@ export abstract class BaseStoryScraper implements StoryScraper {
     return this.scraperOptions.baseUrl;
   }
 
-  extractStoryMetadata(url: string): StoryMetaData {
+  async fetchStoryMetadata(url: string): Promise<StoryMetaData> {
     return {};
   }
   async fetchChapters(

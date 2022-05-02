@@ -10,6 +10,7 @@ import { BachngocsachStoryScraper } from "./Scraper/BachngocsachStoryScraper";
 import { map } from "../../Shared/domain/lodash";
 import { Tienhiep2StoryScraper } from "./Scraper/Tienhiep2StoryScraper";
 import { ThichTienHiepStoryScraper } from "./Scraper/ThichTienHiepStoryScraper";
+import { TangThuVienStoryScraper } from "./Scraper/TangThuVienStoryScraper";
 
 @Injectable()
 export class MemoryStoryScraperRepository implements StoryScraperRepository {
@@ -24,6 +25,7 @@ export class MemoryStoryScraperRepository implements StoryScraperRepository {
     dtruyenScraper: DtruyenStoryScraper,
     bachngocsachStoryScraper: BachngocsachStoryScraper,
     thichTienHiepStoryScraper: ThichTienHiepStoryScraper,
+    tangThuVienStoryScraper: TangThuVienStoryScraper,
   ) {
     this.scraperMapping["truyenfull"] = truyenfullScraper;
     this.scraperMapping["boygias"] = boygiasScraper;
@@ -33,18 +35,19 @@ export class MemoryStoryScraperRepository implements StoryScraperRepository {
     this.scraperMapping["dtruyen"] = dtruyenScraper;
     this.scraperMapping["bachngocsach"] = bachngocsachStoryScraper;
     this.scraperMapping["thichtienhiep"] = thichTienHiepStoryScraper;
+    this.scraperMapping["tangthuvien"] = tangThuVienStoryScraper;
   }
 
   getScraperByUrl(url: string): StoryScraper {
     let result: StoryScraper | null = null;
-    map(this.scraperMapping, (scraper, name: string) => {
+    map(this.scraperMapping, (scraper: StoryScraper, name: string) => {
       if (url.indexOf(name) > 0) {
         result = scraper;
       }
     });
 
     if (!result) {
-      throw new Error("Not found scraper by url");
+      throw new Error("Not found scraper by url[" + url + "]");
     }
     return result;
   }

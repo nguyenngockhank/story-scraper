@@ -14,7 +14,7 @@ export type NodeToChapterCallback = (
 
 export type BuildChaptersFromPageCallback = (
   context: ScraperContext,
-  $: WrappedDOM,
+  $: WrappedDOM | string,
 ) => ChapterWithoutIndex[];
 
 export type BuildChapterPageUrlCallback = (
@@ -88,18 +88,31 @@ async function scrapeChapterUrlListPage(
   // start to fetch chapter url
   let result: ChapterWithoutIndex[] = [];
   try {
-    const $ = await scraper.fetchWrappedDOM(chapterUrl, {
-      retryAttempt: 1,
-    });
+    if (options.noWrappedNode) {
+      const data = await scraper.fetch(chapterUrl, {
+        retryAttempt: 1,
+      });
 
-    if (callbacks.buildChaptersFromPage) {
-      const chapters = callbacks.buildChaptersFromPage(context, $);
+      if (!callbacks.buildChaptersFromPage) {
+        throw new Error("Expect callbacks.buildChaptersFromPage");
+      }
+
+      const chapters = callbacks.buildChaptersFromPage(context, data);
       result = chapters;
     } else {
-      $(options.selectors.chapterItems).each((i, el) => {
-        const chapter = callbacks.nodeToChapter(context, $(el));
-        result.push(chapter);
+      const $ = await scraper.fetchWrappedDOM(chapterUrl, {
+        retryAttempt: 1,
       });
+
+      if (callbacks.buildChaptersFromPage) {
+        const chapters = callbacks.buildChaptersFromPage(context, $);
+        result = chapters;
+      } else {
+        $(options.selectors.chapterItems).each((i, el) => {
+          const chapter = callbacks.nodeToChapter(context, $(el));
+          result.push(chapter);
+        });
+      }
     }
   } finally {
     return result;
@@ -112,7 +125,7 @@ function shouldScrapeNextPage(
   newChapters: ChapterWithoutIndex[],
 ): boolean {
   const { maxChaptersPerPage } = scraperOptions;
-  if (maxChaptersPerPage <= 0) {
+  if (!maxChaptersPerPage || maxChaptersPerPage <= 0) {
     return false;
   }
 

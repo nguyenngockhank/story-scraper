@@ -8,6 +8,7 @@ export type ScraperOptions = {
   baseUrl: string;
   maxChaptersPerPage?: number;
   reverseChapters?: boolean;
+  noWrappedNode?: boolean;
   selectors: {
     chapterContent: string;
     chapterItems: string;

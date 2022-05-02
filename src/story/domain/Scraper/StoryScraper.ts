@@ -4,6 +4,8 @@ import { Story } from "../StoryRepository";
 
 export type StoryMetaData = {
   storyId?: string;
+  storySlug?: string;
+  maxChapter?: number;
 };
 
 export interface StoryScraper {
@@ -14,5 +16,5 @@ export interface StoryScraper {
   ): Promise<ChapterContent[]>;
 
   extractStory(url: string): string;
-  extractStoryMetadata(url: string): StoryMetaData | undefined;
+  fetchStoryMetadata(url: string): Promise<StoryMetaData>;
 }

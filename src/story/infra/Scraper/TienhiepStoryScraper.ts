@@ -32,7 +32,7 @@ export class TienhiepStoryScraper extends BaseStoryScraper {
     super(scraper, storyRepository);
   }
 
-  extractStoryMetadata(url: string): StoryMetaData {
+  async fetchStoryMetadata(url: string) {
     // e.g: https://tienhiep.net/truyen/11539/khien-em-ga-cho-anh
     const parts = url.split("/");
     const storyId = parts[parts.length - 2];
