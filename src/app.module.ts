@@ -1,5 +1,4 @@
 import { Global, Module } from "@nestjs/common";
-import { FootballModule } from "./football/infra/football.module";
 import { TransformerModule } from "./Transformer/infra/transformer.module";
 import { appItems } from "./Shared/domain/AppContainer";
 import { NedbDatastoreFactory } from "./Shared/infra/Datastore/NedbDatastoreFactory";
@@ -10,7 +9,7 @@ import { Mp3ProcessorImpl } from "./Shared/infra/Mp3Processor/Mp3ProcessorImpl";
 
 @Global()
 @Module({
-  imports: [FootballModule, TransformerModule],
+  imports: [TransformerModule],
   providers: [
     NedbDatastoreFactory,
     Finder,
