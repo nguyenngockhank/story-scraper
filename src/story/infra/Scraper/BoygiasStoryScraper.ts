@@ -7,12 +7,8 @@ import { Scraper, WrappedNode } from "../../../Shared/domain/Scraper";
 import { Chapter } from "../../domain/Chapter";
 import { storyItems } from "../../domain/StoryContainer";
 import { StoryRepository } from "../../domain/StoryRepository";
-import {
-  BaseStoryScraper,
-  ScraperOptions,
-  StoryContext,
-} from "./BaseStoryScraper";
-import { ScraperContext } from "./core/scrapeChapters";
+import { BaseStoryScraper } from "./BaseStoryScraper";
+import { ScraperContext, ScraperOptions } from "./core/CoreTypes";
 
 @Injectable()
 export class BoygiasStoryScraper extends BaseStoryScraper {
@@ -37,16 +33,16 @@ export class BoygiasStoryScraper extends BaseStoryScraper {
   }
 
   buildChapterPageUrl(
-    { storyName }: ScraperContext,
+    { storyName, options: { baseUrl } }: ScraperContext,
     pageIndex: number,
   ): string | Promise<string> {
     if (pageIndex > 1) {
-      return `${this.scraperOptions.baseUrl}/series/${storyName}/page/${pageIndex}/`;
+      return `${baseUrl}/series/${storyName}/page/${pageIndex}/`;
     }
-    return `${this.scraperOptions.baseUrl}/series/${storyName}/`;
+    return `${baseUrl}/series/${storyName}/`;
   }
 
-  nodeToChapter(story: string, $el: WrappedNode): Omit<Chapter, "index"> {
+  nodeToChapter(context, $el: WrappedNode): Omit<Chapter, "index"> {
     return {
       url: $el.find("h1 a").attr("href").trim(),
       title: $el.find("h1 a").text().trim(),

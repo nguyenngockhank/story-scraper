@@ -7,16 +7,12 @@ import { Scraper, WrappedNode } from "../../../Shared/domain/Scraper";
 import { Chapter } from "../../domain/Chapter";
 import { storyItems } from "../../domain/StoryContainer";
 import { StoryRepository } from "../../domain/StoryRepository";
-import {
-  BaseStoryScraper,
-  ScraperOptions,
-  StoryContext,
-} from "./BaseStoryScraper";
-import { ScraperContext } from "./core/scrapeChapters";
+import { BaseStoryScraper } from "./BaseStoryScraper";
+import { ScraperContext } from "./core/CoreTypes";
 
 @Injectable()
 export class SstruyenStoryScraper extends BaseStoryScraper {
-  protected scraperOptions: ScraperOptions = {
+  protected scraperOptions = {
     baseUrl: "https://sstruyen.com",
     maxChaptersPerPage: 32,
     selectors: {
@@ -36,20 +32,23 @@ export class SstruyenStoryScraper extends BaseStoryScraper {
   }
 
   buildChapterPageUrl(
-    { storyName }: ScraperContext,
+    { storyName, options: { baseUrl } }: ScraperContext,
     pageIndex: number,
   ): string {
     if (pageIndex === 1) {
-      return `${this.scraperOptions.baseUrl}/${storyName}/`;
+      return `${baseUrl}/${storyName}/`;
     }
-    return `${this.scraperOptions.baseUrl}/${storyName}/trang-${pageIndex}/`;
+    return `${baseUrl}/${storyName}/trang-${pageIndex}/`;
   }
 
-  nodeToChapter(story: string, $el: WrappedNode): Omit<Chapter, "index"> {
+  nodeToChapter(
+    { storyName }: ScraperContext,
+    $el: WrappedNode,
+  ): Omit<Chapter, "index"> {
     let chapterUrl = $el.find("a").attr("href").trim();
     // fill prefix
-    if (!chapterUrl.startsWith(`/${story}/`)) {
-      chapterUrl = `/${story}/${chapterUrl}`;
+    if (!chapterUrl.startsWith(`/${storyName}/`)) {
+      chapterUrl = `/${storyName}/${chapterUrl}`;
     }
 
     return {

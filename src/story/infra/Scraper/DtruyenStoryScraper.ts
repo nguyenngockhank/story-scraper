@@ -7,8 +7,8 @@ import { Scraper, WrappedNode } from "../../../Shared/domain/Scraper";
 import { Chapter } from "../../domain/Chapter";
 import { storyItems } from "../../domain/StoryContainer";
 import { StoryRepository } from "../../domain/StoryRepository";
-import { BaseStoryScraper, ScraperOptions } from "./BaseStoryScraper";
-import { ScraperContext } from "./core/scrapeChapters";
+import { BaseStoryScraper } from "./BaseStoryScraper";
+import { ScraperContext, ScraperOptions } from "./core/CoreTypes";
 
 @Injectable()
 export class DtruyenStoryScraper extends BaseStoryScraper {
@@ -32,16 +32,16 @@ export class DtruyenStoryScraper extends BaseStoryScraper {
   }
 
   buildChapterPageUrl(
-    { storyName }: ScraperContext,
+    { storyName, options: { baseUrl } }: ScraperContext,
     pageIndex: number,
   ): string {
     if (pageIndex === 1) {
-      return `${this.scraperOptions.baseUrl}/${storyName}/`;
+      return `${baseUrl}/${storyName}/`;
     }
-    return `${this.scraperOptions.baseUrl}/${storyName}/${pageIndex}/`;
+    return `${baseUrl}/${storyName}/${pageIndex}/`;
   }
 
-  nodeToChapter(story: string, $el: WrappedNode): Omit<Chapter, "index"> {
+  nodeToChapter(context, $el: WrappedNode): Omit<Chapter, "index"> {
     return {
       url: $el.find("a").attr("href").trim(),
       title: $el.find("a").text().trim(),

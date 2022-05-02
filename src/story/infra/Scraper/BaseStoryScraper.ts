@@ -3,29 +3,11 @@ import { Chapter } from "../../domain/Chapter";
 import { ChapterContent } from "../../domain/ChapterContent";
 import { StoryRepository } from "../../domain/StoryRepository";
 import { StoryMetaData, StoryScraper } from "../../domain/Scraper/StoryScraper";
-import {
-  chunk,
-  intersectionBy,
-  replace,
-  trimEnd,
-} from "../../../Shared/domain/lodash";
-import { scrapeChapters, ScraperContext } from "./core/scrapeChapters";
-export type ScraperOptions = {
-  baseUrl: string;
-  maxChaptersPerPage?: number;
-  reverseChapters?: boolean;
-  selectors: {
-    chapterContent: string;
-    chapterItems: string;
-  };
-};
+import { chunk, replace, trimEnd } from "../../../Shared/domain/lodash";
+import { scrapeChapters } from "./core/scrapeChapters";
+import { ScraperContext, ScraperOptions } from "./core/CoreTypes";
 
 export type ChapterWithoutIndex = Omit<Chapter, "index">;
-
-export type StoryContext = {
-  storyName: string;
-  metaData?: StoryMetaData;
-};
 
 export abstract class BaseStoryScraper implements StoryScraper {
   protected scraperOptions: ScraperOptions;
@@ -67,7 +49,8 @@ export abstract class BaseStoryScraper implements StoryScraper {
     };
 
     const chapters = await scrapeChapters(context, {
-      buildChapterPage: this.buildChapterPageUrl,
+      buildChapterPage: this.buildChapterPageUrl.bind(this),
+      nodeToChapter: this.nodeToChapter.bind(this),
     });
 
     await this.storyRepository.saveChapterList(story, chapters);
@@ -80,7 +63,10 @@ export abstract class BaseStoryScraper implements StoryScraper {
     pageIndex: number,
   ): string | Promise<string>;
 
-  abstract nodeToChapter(story: string, $el: WrappedNode): ChapterWithoutIndex;
+  abstract nodeToChapter(
+    scrapeContext: ScraperContext,
+    $el: WrappedNode,
+  ): ChapterWithoutIndex;
 
   async fetchChapterContents(story: string): Promise<ChapterContent[]> {
     const chapters: Chapter[] = await this.storyRepository.getChapterList(

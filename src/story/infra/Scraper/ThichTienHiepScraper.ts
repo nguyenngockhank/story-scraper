@@ -7,15 +7,12 @@ import { Scraper, WrappedNode } from "../../../Shared/domain/Scraper";
 import { Chapter } from "../../domain/Chapter";
 import { storyItems } from "../../domain/StoryContainer";
 import { StoryRepository } from "../../domain/StoryRepository";
-import {
-  BaseStoryScraper,
-  ScraperOptions,
-  StoryContext,
-} from "./BaseStoryScraper";
+import { BaseStoryScraper } from "./BaseStoryScraper";
+import { ScraperContext } from "./core/CoreTypes";
 
 @Injectable()
 export class DtruyenStoryScraper extends BaseStoryScraper {
-  protected scraperOptions: ScraperOptions = {
+  protected scraperOptions = {
     baseUrl: "https://thichtienhiep.com",
     maxChaptersPerPage: 0,
     selectors: {
@@ -34,21 +31,20 @@ export class DtruyenStoryScraper extends BaseStoryScraper {
     super(scraper, storyRepository);
   }
 
-  async chapterUrl(storyContext: StoryContext): Promise<string> {
-    const { baseUrl } = this.scraperOptions;
-    const { storyName } = storyContext;
-
+  buildChapterPageUrl({
+    storyName,
+    options: { baseUrl },
+  }: ScraperContext): string {
     const url = `${baseUrl}/doc-truyen/${storyName}.html`;
-    const $ = await this.scraper.fetchWrappedDOM(url);
-
-    const imgSrc = $(".preview-thumbnail img").attr("src");
-    const storyIndex = 5;
-    const storyId = imgSrc.split("/")[storyIndex];
-
-    return `${baseUrl}/api/v1/stories/${storyId}/chapters`;
+    return url;
+    // const $ = await this.scraper.fetchWrappedDOM(url);
+    // const imgSrc = $(".preview-thumbnail img").attr("src");
+    // const storyIndex = 5;
+    // const storyId = imgSrc.split("/")[storyIndex];
+    // return `${baseUrl}/api/v1/stories/${storyId}/chapters`;
   }
 
-  nodeToChapter(story: string, $el: WrappedNode): Omit<Chapter, "index"> {
+  nodeToChapter(context, $el: WrappedNode): Omit<Chapter, "index"> {
     return {
       url: $el.find("a").attr("href").trim(),
       title: $el.find("a").text().trim(),

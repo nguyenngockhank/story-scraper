@@ -8,12 +8,12 @@ import { Chapter } from "../../domain/Chapter";
 import { StoryMetaData } from "../../domain/Scraper/StoryScraper";
 import { storyItems } from "../../domain/StoryContainer";
 import { StoryRepository } from "../../domain/StoryRepository";
-import { BaseStoryScraper, ScraperOptions } from "./BaseStoryScraper";
-import { ScraperContext } from "./core/scrapeChapters";
+import { BaseStoryScraper } from "./BaseStoryScraper";
+import { ScraperContext } from "./core/CoreTypes";
 
 @Injectable()
 export class TienhiepStoryScraper extends BaseStoryScraper {
-  protected scraperOptions: ScraperOptions = {
+  protected scraperOptions = {
     baseUrl: "https://tienhiep.net",
     maxChaptersPerPage: 50,
     selectors: {
@@ -42,16 +42,16 @@ export class TienhiepStoryScraper extends BaseStoryScraper {
   }
 
   buildChapterPageUrl(
-    { storyName, metaData }: ScraperContext,
+    { storyName, metaData, options }: ScraperContext,
     pageIndex: number,
   ): string {
     if (!metaData.storyId) {
       throw new Error("Expect storyId in metaData");
     }
-    return `${this.scraperOptions.baseUrl}/danh-sach-chuong/${metaData.storyId}/${storyName}?page=${pageIndex}`;
+    return `${options.baseUrl}/danh-sach-chuong/${metaData.storyId}/${storyName}?page=${pageIndex}`;
   }
 
-  nodeToChapter(story: string, $el: WrappedNode): Omit<Chapter, "index"> {
+  nodeToChapter(context, $el: WrappedNode): Omit<Chapter, "index"> {
     const chapterUrl = $el.find("a").attr("href").trim();
     return {
       url: this.scraperOptions.baseUrl + chapterUrl,
