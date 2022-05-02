@@ -7,11 +7,8 @@ import { Scraper, WrappedNode } from "../../../Shared/domain/Scraper";
 import { Chapter } from "../../domain/Chapter";
 import { storyItems } from "../../domain/StoryContainer";
 import { StoryRepository } from "../../domain/StoryRepository";
-import {
-  BaseStoryScraper,
-  ScraperOptions,
-  StoryContext,
-} from "./BaseStoryScraper";
+import { BaseStoryScraper, ScraperOptions } from "./BaseStoryScraper";
+import { ScraperContext } from "./core/scrapeChapters";
 
 @Injectable()
 export class BachngocsachStoryScraper extends BaseStoryScraper {
@@ -33,7 +30,7 @@ export class BachngocsachStoryScraper extends BaseStoryScraper {
     super(scraper, storyRepository);
   }
 
-  chapterUrl({ storyName }: StoryContext, pageIndex: number): string {
+  buildChapterPageUrl({ storyName }: ScraperContext): string | Promise<string> {
     return `${this.baseUrl()}/reader/${storyName}/muc-luc?page=all`;
   }
 

@@ -8,11 +8,8 @@ import { Chapter } from "../../domain/Chapter";
 import { StoryMetaData } from "../../domain/Scraper/StoryScraper";
 import { storyItems } from "../../domain/StoryContainer";
 import { StoryRepository } from "../../domain/StoryRepository";
-import {
-  BaseStoryScraper,
-  ScraperOptions,
-  StoryContext,
-} from "./BaseStoryScraper";
+import { BaseStoryScraper, ScraperOptions } from "./BaseStoryScraper";
+import { ScraperContext } from "./core/scrapeChapters";
 
 @Injectable()
 export class TienhiepStoryScraper extends BaseStoryScraper {
@@ -44,8 +41,10 @@ export class TienhiepStoryScraper extends BaseStoryScraper {
     };
   }
 
-  chapterUrl(storyContext: StoryContext, pageIndex: number): string {
-    const { storyName, metaData } = storyContext;
+  buildChapterPageUrl(
+    { storyName, metaData }: ScraperContext,
+    pageIndex: number,
+  ): string {
     if (!metaData.storyId) {
       throw new Error("Expect storyId in metaData");
     }

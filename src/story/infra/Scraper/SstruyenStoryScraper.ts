@@ -12,6 +12,7 @@ import {
   ScraperOptions,
   StoryContext,
 } from "./BaseStoryScraper";
+import { ScraperContext } from "./core/scrapeChapters";
 
 @Injectable()
 export class SstruyenStoryScraper extends BaseStoryScraper {
@@ -34,8 +35,10 @@ export class SstruyenStoryScraper extends BaseStoryScraper {
     super(scraper, storyRepository);
   }
 
-  chapterUrl(storyContext: StoryContext, pageIndex: number): string {
-    const { storyName } = storyContext;
+  buildChapterPageUrl(
+    { storyName }: ScraperContext,
+    pageIndex: number,
+  ): string {
     if (pageIndex === 1) {
       return `${this.scraperOptions.baseUrl}/${storyName}/`;
     }

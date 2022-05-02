@@ -7,11 +7,8 @@ import { Scraper, WrappedNode } from "../../../Shared/domain/Scraper";
 import { Chapter } from "../../domain/Chapter";
 import { storyItems } from "../../domain/StoryContainer";
 import { StoryRepository } from "../../domain/StoryRepository";
-import {
-  BaseStoryScraper,
-  ScraperOptions,
-  StoryContext,
-} from "./BaseStoryScraper";
+import { BaseStoryScraper, ScraperOptions } from "./BaseStoryScraper";
+import { ScraperContext } from "./core/scrapeChapters";
 
 @Injectable()
 export class TruyenfullStoryScraper extends BaseStoryScraper {
@@ -34,8 +31,11 @@ export class TruyenfullStoryScraper extends BaseStoryScraper {
     super(scraper, storyRepository);
   }
 
-  chapterUrl(storyContext: StoryContext, pageIndex: number): string {
-    return `${this.scraperOptions.baseUrl}${storyContext.storyName}/trang-${pageIndex}`;
+  buildChapterPageUrl(
+    { storyName }: ScraperContext,
+    pageIndex: number,
+  ): string {
+    return `${this.scraperOptions.baseUrl}${storyName}/trang-${pageIndex}`;
   }
 
   nodeToChapter(story: string, $el: WrappedNode): Omit<Chapter, "index"> {
