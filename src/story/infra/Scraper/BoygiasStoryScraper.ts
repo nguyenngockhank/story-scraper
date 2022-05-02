@@ -7,7 +7,7 @@ import { Scraper, WrappedNode } from "../../../Shared/domain/Scraper";
 import { Chapter } from "../../domain/Chapter";
 import { storyItems } from "../../domain/StoryContainer";
 import { StoryRepository } from "../../domain/StoryRepository";
-import { BaseStoryScraper } from "./BaseStoryScraper";
+import { BaseStoryScraper } from "./core/BaseStoryScraper";
 import { ScraperContext, ScraperOptions } from "./core/CoreTypes";
 
 @Injectable()
@@ -42,10 +42,10 @@ export class BoygiasStoryScraper extends BaseStoryScraper {
     return `${baseUrl}/series/${storyName}/`;
   }
 
-  nodeToChapter(context, $el: WrappedNode): Omit<Chapter, "index"> {
+  nodeToChapter = (context, $el: WrappedNode): Omit<Chapter, "index"> => {
     return {
       url: $el.find("h1 a").attr("href").trim(),
       title: $el.find("h1 a").text().trim(),
     };
-  }
+  };
 }

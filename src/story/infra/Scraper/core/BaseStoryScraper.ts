@@ -1,13 +1,19 @@
-import { Scraper, WrappedNode } from "../../../Shared/domain/Scraper";
-import { Chapter } from "../../domain/Chapter";
-import { ChapterContent } from "../../domain/ChapterContent";
-import { StoryRepository } from "../../domain/StoryRepository";
-import { StoryMetaData, StoryScraper } from "../../domain/Scraper/StoryScraper";
-import { chunk, replace, trimEnd } from "../../../Shared/domain/lodash";
-import { scrapeChapters } from "./core/scrapeChapters";
-import { ScraperContext, ScraperOptions } from "./core/CoreTypes";
-
-export type ChapterWithoutIndex = Omit<Chapter, "index">;
+import { Scraper } from "../../../../Shared/domain/Scraper";
+import { Chapter } from "../../../domain/Chapter";
+import { ChapterContent } from "../../../domain/ChapterContent";
+import { StoryRepository } from "../../../domain/StoryRepository";
+import {
+  StoryMetaData,
+  StoryScraper,
+} from "../../../domain/Scraper/StoryScraper";
+import { chunk, replace, trimEnd } from "../../../../Shared/domain/lodash";
+import {
+  BuildChaptersFromPageCallback,
+  NodeToChapterCallback,
+  scrapeChapters,
+} from "./scrapeChapters";
+import { ScraperContext, ScraperOptions } from "./CoreTypes";
+import { ContentFilter, scrapeChapterContent } from "./scrapeChapterContent";
 
 export abstract class BaseStoryScraper implements StoryScraper {
   protected scraperOptions: ScraperOptions;
@@ -50,7 +56,8 @@ export abstract class BaseStoryScraper implements StoryScraper {
 
     const chapters = await scrapeChapters(context, {
       buildChapterPage: this.buildChapterPageUrl.bind(this),
-      nodeToChapter: this.nodeToChapter.bind(this),
+      nodeToChapter: this.nodeToChapter?.bind(this),
+      buildChaptersFromPage: this.buildChaptersFromPage?.bind(this),
     });
 
     await this.storyRepository.saveChapterList(story, chapters);
@@ -63,10 +70,11 @@ export abstract class BaseStoryScraper implements StoryScraper {
     pageIndex: number,
   ): string | Promise<string>;
 
-  abstract nodeToChapter(
-    scrapeContext: ScraperContext,
-    $el: WrappedNode,
-  ): ChapterWithoutIndex;
+  protected buildChaptersFromPage: BuildChaptersFromPageCallback | undefined;
+
+  protected nodeToChapter: NodeToChapterCallback | undefined;
+
+  protected contentFilter: ContentFilter | undefined;
 
   async fetchChapterContents(story: string): Promise<ChapterContent[]> {
     const chapters: Chapter[] = await this.storyRepository.getChapterList(
@@ -84,7 +92,7 @@ export abstract class BaseStoryScraper implements StoryScraper {
     return result;
   }
 
-  async fetchChapterContent(
+  private async fetchChapterContent(
     story: string,
     chapter: Chapter,
   ): Promise<ChapterContent> {
@@ -96,20 +104,21 @@ export abstract class BaseStoryScraper implements StoryScraper {
       return item;
     }
 
-    const content = await this.scrapeChapterContent(chapter);
+    const context: ScraperContext = {
+      storyName: story,
+      options: this.scraperOptions,
+      scraper: this.scraper,
+    };
+
+    const chapterContent = await scrapeChapterContent(context, chapter, {
+      content: this.contentFilter,
+    });
+
     const result: ChapterContent = {
       ...chapter,
-      content,
+      ...chapterContent,
     };
     await this.storyRepository.saveChapterContent(story, result);
     return result;
-  }
-
-  async scrapeChapterContent(chapter: Chapter): Promise<string> {
-    const $ = await this.scraper.fetchWrappedDOM(chapter.url);
-    const content = $(this.scraperOptions.selectors.chapterContent)
-      .html()
-      .trim();
-    return content;
   }
 }

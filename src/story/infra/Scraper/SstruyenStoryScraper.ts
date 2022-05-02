@@ -7,7 +7,7 @@ import { Scraper, WrappedNode } from "../../../Shared/domain/Scraper";
 import { Chapter } from "../../domain/Chapter";
 import { storyItems } from "../../domain/StoryContainer";
 import { StoryRepository } from "../../domain/StoryRepository";
-import { BaseStoryScraper } from "./BaseStoryScraper";
+import { BaseStoryScraper } from "./core/BaseStoryScraper";
 import { ScraperContext } from "./core/CoreTypes";
 
 @Injectable()
@@ -41,10 +41,10 @@ export class SstruyenStoryScraper extends BaseStoryScraper {
     return `${baseUrl}/${storyName}/trang-${pageIndex}/`;
   }
 
-  nodeToChapter(
+  nodeToChapter = (
     { storyName }: ScraperContext,
     $el: WrappedNode,
-  ): Omit<Chapter, "index"> {
+  ): Omit<Chapter, "index"> => {
     let chapterUrl = $el.find("a").attr("href").trim();
     // fill prefix
     if (!chapterUrl.startsWith(`/${storyName}/`)) {
@@ -55,5 +55,5 @@ export class SstruyenStoryScraper extends BaseStoryScraper {
       url: `${this.scraperOptions.baseUrl}${chapterUrl}`,
       title: $el.find("a").text().trim(),
     };
-  }
+  };
 }

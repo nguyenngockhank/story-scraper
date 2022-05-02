@@ -8,7 +8,7 @@ import { Chapter } from "../../domain/Chapter";
 import { StoryMetaData } from "../../domain/Scraper/StoryScraper";
 import { storyItems } from "../../domain/StoryContainer";
 import { StoryRepository } from "../../domain/StoryRepository";
-import { BaseStoryScraper } from "./BaseStoryScraper";
+import { BaseStoryScraper } from "./core/BaseStoryScraper";
 import { ScraperContext } from "./core/CoreTypes";
 
 @Injectable()
@@ -51,11 +51,11 @@ export class TienhiepStoryScraper extends BaseStoryScraper {
     return `${options.baseUrl}/danh-sach-chuong/${metaData.storyId}/${storyName}?page=${pageIndex}`;
   }
 
-  nodeToChapter(context, $el: WrappedNode): Omit<Chapter, "index"> {
+  nodeToChapter = (context, $el: WrappedNode): Omit<Chapter, "index"> => {
     const chapterUrl = $el.find("a").attr("href").trim();
     return {
       url: this.scraperOptions.baseUrl + chapterUrl,
       title: $el.text().trim(),
     };
-  }
+  };
 }

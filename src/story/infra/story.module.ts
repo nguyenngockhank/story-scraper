@@ -12,6 +12,7 @@ import { TienhiepStoryScraper } from "./Scraper/TienhiepStoryScraper";
 import { Tienhiep2StoryScraper } from "./Scraper/Tienhiep2StoryScraper";
 import { DtruyenStoryScraper } from "./Scraper/DtruyenStoryScraper";
 import { BachngocsachStoryScraper } from "./Scraper/BachngocsachStoryScraper";
+import { ThichTienHiepStoryScraper } from "./Scraper/ThichTienHiepStoryScraper";
 
 @Module({
   controllers: [StoryController],
@@ -28,6 +29,7 @@ import { BachngocsachStoryScraper } from "./Scraper/BachngocsachStoryScraper";
     Tienhiep2StoryScraper,
     DtruyenStoryScraper,
     BachngocsachStoryScraper,
+    ThichTienHiepStoryScraper,
     {
       provide: storyItems.StoryScraperRepository,
       useClass: MemoryStoryScraperRepository,

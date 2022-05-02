@@ -1,15 +1,31 @@
 import { intersectionBy } from "../../../../Shared/domain/lodash";
-import { WrappedNode } from "../../../../Shared/domain/Scraper";
+import { WrappedDOM, WrappedNode } from "../../../../Shared/domain/Scraper";
 import { Chapter } from "../../../domain/Chapter";
-import { ScraperOptions } from "../BaseStoryScraper";
-import { ScraperContext, ChapterWithoutIndex } from "./CoreTypes";
+import {
+  ScraperContext,
+  ChapterWithoutIndex,
+  ScraperOptions,
+} from "./CoreTypes";
+
+export type NodeToChapterCallback = (
+  context: ScraperContext,
+  $el: WrappedNode,
+) => ChapterWithoutIndex;
+
+export type BuildChaptersFromPageCallback = (
+  context: ScraperContext,
+  $: WrappedDOM,
+) => ChapterWithoutIndex[];
+
+export type BuildChapterPageUrlCallback = (
+  context: ScraperContext,
+  pageIndex: number,
+) => string | Promise<string>;
 
 export type ScraperCallbacks = {
-  buildChapterPage: (
-    context: ScraperContext,
-    pageIndex: number,
-  ) => string | Promise<string>;
-  nodeToChapter(context: ScraperContext, $el: WrappedNode): ChapterWithoutIndex;
+  buildChapterPage: BuildChapterPageUrlCallback;
+  nodeToChapter?: NodeToChapterCallback;
+  buildChaptersFromPage?: BuildChaptersFromPageCallback;
 };
 
 export async function scrapeChapters(
@@ -17,11 +33,11 @@ export async function scrapeChapters(
   scraperCallbacks: ScraperCallbacks,
 ): Promise<Chapter[]> {
   // start scraping
-  const chaptersWithoutIndexes: ChapterWithoutIndex[] = [];
+  const result: ChapterWithoutIndex[] = [];
   let continueScraping = false;
   let pageIndex = 1;
   do {
-    const newItems = await scrapeChapterUrlListPage(
+    const newChapters = await scrapeChapterUrlListPage(
       scraperContext,
       scraperCallbacks,
       pageIndex,
@@ -30,20 +46,20 @@ export async function scrapeChapters(
 
     continueScraping = shouldScrapeNextPage(
       scraperContext.options,
-      chaptersWithoutIndexes,
-      newItems,
+      result,
+      newChapters,
     );
 
-    chaptersWithoutIndexes.push(...newItems);
+    result.push(...newChapters);
   } while (continueScraping);
   // end scraping
 
   // format index
   let chapterIndex = 1;
   if (scraperContext.options.reverseChapters) {
-    chaptersWithoutIndexes.reverse();
+    result.reverse();
   }
-  const chapters = chaptersWithoutIndexes.map((c) => ({
+  const chapters = result.map((c) => ({
     ...c,
     index: chapterIndex++,
   }));
@@ -55,16 +71,13 @@ export async function scrapeChapters(
 
 async function scrapeChapterUrlListPage(
   context: ScraperContext,
-  scraperCallbacks: ScraperCallbacks,
+  callbacks: ScraperCallbacks,
   pageIndex: number,
 ): Promise<ChapterWithoutIndex[]> {
-  const { storyName, scraper, options } = context;
+  const { scraper, options } = context;
 
   // build chapter list page index
-  const chapterUrlResult = scraperCallbacks.buildChapterPage(
-    context,
-    pageIndex,
-  );
+  const chapterUrlResult = callbacks.buildChapterPage(context, pageIndex);
   let chapterUrl = "";
   if (typeof chapterUrlResult === "string") {
     chapterUrl = chapterUrlResult;
@@ -73,17 +86,23 @@ async function scrapeChapterUrlListPage(
   }
 
   // start to fetch chapter url
-  const chapters: ChapterWithoutIndex[] = [];
+  let result: ChapterWithoutIndex[] = [];
   try {
     const $ = await scraper.fetchWrappedDOM(chapterUrl, {
       retryAttempt: 1,
     });
-    $(options.selectors.chapterItems).each((i, el) => {
-      const chapter = scraperCallbacks.nodeToChapter(context, $(el));
-      chapters.push(chapter);
-    });
+
+    if (callbacks.buildChaptersFromPage) {
+      const chapters = callbacks.buildChaptersFromPage(context, $);
+      result = chapters;
+    } else {
+      $(options.selectors.chapterItems).each((i, el) => {
+        const chapter = callbacks.nodeToChapter(context, $(el));
+        result.push(chapter);
+      });
+    }
   } finally {
-    return chapters;
+    return result;
   }
 }
 
