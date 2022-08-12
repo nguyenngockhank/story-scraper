@@ -10,13 +10,18 @@ import { chunk, replace, trimEnd } from "../../../../Shared/domain/lodash";
 import {
   BuildChaptersFromPageCallback,
   NodeToChapterCallback,
-  scrapeChapters,
-} from "./scrapeChapters";
-import { ScraperContext, ScraperOptions } from "./CoreTypes";
+  scrapeChaptersOnPagination,
+} from "./scrapeChaptersOnPagination";
+import {
+  ChapterWithoutIndex,
+  ScraperContext,
+  ScraperOptions,
+} from "./CoreTypes";
 import { ContentFilter, scrapeChapterContent } from "./scrapeChapterContent";
+import { scrapeChaptersOnApi } from "./scrapeChaptersOnApi";
 
 export abstract class BaseStoryScraper implements StoryScraper {
-  protected scraperOptions: ScraperOptions;
+  protected options: ScraperOptions;
 
   constructor(
     protected scraper: Scraper,
@@ -32,7 +37,7 @@ export abstract class BaseStoryScraper implements StoryScraper {
   }
 
   protected baseUrl(): string {
-    return this.scraperOptions.baseUrl;
+    return this.options.baseUrl;
   }
 
   async fetchStoryMetadata(url: string): Promise<StoryMetaData> {
@@ -50,19 +55,34 @@ export abstract class BaseStoryScraper implements StoryScraper {
     const context: ScraperContext = {
       storyName: story,
       metaData: metaData,
-      options: this.scraperOptions,
+      options: this.options,
       scraper: this.scraper,
     };
 
-    const chapters = await scrapeChapters(context, {
-      buildChapterPage: this.buildChapterPageUrl.bind(this),
-      nodeToChapter: this.nodeToChapter?.bind(this),
-      buildChaptersFromPage: this.buildChaptersFromPage?.bind(this),
-    });
+    const { scrapeChaptersType } = this.options;
+
+    const chapters =
+      scrapeChaptersType !== "onApi"
+        ? await scrapeChaptersOnPagination(context, {
+            buildChapterPage: this.buildChapterPageUrl.bind(this),
+            nodeToChapter: this.nodeToChapter?.bind(this),
+            buildChaptersFromPage: this.buildChaptersFromPage?.bind(this),
+          })
+        : await scrapeChaptersOnApi(context, {
+            buildChapterPage: this.buildChapterPageUrl.bind(this),
+            toChapters: this.toChapters.bind(this),
+          });
 
     await this.storyRepository.saveChapterList(story, chapters);
 
     return chapters;
+  }
+
+  protected toChapters(
+    context: ScraperContext,
+    doc: any,
+  ): ChapterWithoutIndex[] {
+    throw new Error("implement this");
   }
 
   abstract buildChapterPageUrl(
@@ -106,7 +126,7 @@ export abstract class BaseStoryScraper implements StoryScraper {
 
     const context: ScraperContext = {
       storyName: story,
-      options: this.scraperOptions,
+      options: this.options,
       scraper: this.scraper,
     };
 

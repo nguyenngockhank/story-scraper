@@ -14,6 +14,7 @@ import { DtruyenStoryScraper } from "./Scraper/DtruyenStoryScraper";
 import { BachngocsachStoryScraper } from "./Scraper/BachngocsachStoryScraper";
 import { ThichTienHiepStoryScraper } from "./Scraper/ThichTienHiepStoryScraper";
 import { TangThuVienStoryScraper } from "./Scraper/TangThuVienStoryScraper";
+import { MetruyenchuStoryScraper } from "./Scraper/MetruyenchuStoryScraper";
 
 @Module({
   controllers: [StoryController],
@@ -38,6 +39,7 @@ import { TangThuVienStoryScraper } from "./Scraper/TangThuVienStoryScraper";
     },
     ScrapeStoryByProviderUseCase,
     ScrapeStoryByUrlUseCase,
+    MetruyenchuStoryScraper,
   ],
   exports: [
     {

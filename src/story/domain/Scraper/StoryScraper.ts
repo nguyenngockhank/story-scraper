@@ -6,6 +6,7 @@ export type StoryMetaData = {
   storyId?: string;
   storySlug?: string;
   maxChapter?: number;
+  token?: string;
 };
 
 export interface StoryScraper {

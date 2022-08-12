@@ -28,7 +28,7 @@ export type ScraperCallbacks = {
   buildChaptersFromPage?: BuildChaptersFromPageCallback;
 };
 
-export async function scrapeChapters(
+export async function scrapeChaptersOnPagination(
   scraperContext: ScraperContext,
   scraperCallbacks: ScraperCallbacks,
 ): Promise<Chapter[]> {
