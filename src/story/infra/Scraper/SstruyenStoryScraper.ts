@@ -12,7 +12,7 @@ import { ScraperContext } from "./core/CoreTypes";
 
 @Injectable()
 export class SstruyenStoryScraper extends BaseStoryScraper {
-  protected scraperOptions = {
+  protected options = {
     baseUrl: "https://sstruyen.com",
     maxChaptersPerPage: 32,
     selectors: {
@@ -52,7 +52,7 @@ export class SstruyenStoryScraper extends BaseStoryScraper {
     }
 
     return {
-      url: `${this.scraperOptions.baseUrl}${chapterUrl}`,
+      url: `${this.options.baseUrl}${chapterUrl}`,
       title: $el.find("a").text().trim(),
     };
   };

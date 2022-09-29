@@ -54,9 +54,9 @@ export class MetruyenchuStoryScraper extends BaseStoryScraper {
 
   async fetchStoryMetadata(url: string): Promise<StoryMetaData> {
     return {
-      storyId: "109334",
+      storyId: "101416",
       token:
-        "eyJhbGciOiJIUzI1NiIsICJ0eXAiOiJKV1QifQ.eyJqdGkiOiJsNnFzeWZraCIsImlzcyI6InYyL2NoYXB0ZXJzIiwic3ViIjoiRkUtTWVUcnV5ZW5DaHUiLCJleHAiOjE2NjAzMzI0OTZ9.zQD4Wgduys64kG7dKcTnu_s1p0LGq-BlrcA2HJ7Fy7Y",
+        "eyJhbGciOiJIUzI1NiIsICJ0eXAiOiJKV1QifQ.eyJqdGkiOiJsOGJzMTJzMiIsImlzcyI6InYyL2NoYXB0ZXJzIiwic3ViIjoiRkUtTWVUcnV5ZW5DaHUiLCJleHAiOjE2NjM3Nzc1MTJ9.7paBHed2e_LYjNhGgRr072FYwqFDX-TGMABfrxCTBsk",
     };
   }
 

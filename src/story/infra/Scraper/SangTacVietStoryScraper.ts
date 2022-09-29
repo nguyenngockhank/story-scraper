@@ -12,7 +12,7 @@ import { ChapterWithoutIndex, ScraperContext } from "./core/CoreTypes";
 
 @Injectable()
 export class SangTacVietStoryScraper extends BaseStoryScraper {
-  protected scraperOptions = {
+  protected options = {
     baseUrl: "https://sangtacviet.info",
     noWrappedNode: true,
     selectors: {

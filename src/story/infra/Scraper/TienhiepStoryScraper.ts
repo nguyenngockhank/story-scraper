@@ -13,7 +13,7 @@ import { ScraperContext } from "./core/CoreTypes";
 
 @Injectable()
 export class TienhiepStoryScraper extends BaseStoryScraper {
-  protected scraperOptions = {
+  protected options = {
     baseUrl: "https://tienhiep.net",
     maxChaptersPerPage: 50,
     selectors: {
@@ -54,7 +54,7 @@ export class TienhiepStoryScraper extends BaseStoryScraper {
   nodeToChapter = (context, $el: WrappedNode): Omit<Chapter, "index"> => {
     const chapterUrl = $el.find("a").attr("href").trim();
     return {
-      url: this.scraperOptions.baseUrl + chapterUrl,
+      url: this.options.baseUrl + chapterUrl,
       title: $el.text().trim(),
     };
   };

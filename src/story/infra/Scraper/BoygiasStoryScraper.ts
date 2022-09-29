@@ -12,7 +12,7 @@ import { ScraperContext, ScraperOptions } from "./core/CoreTypes";
 
 @Injectable()
 export class BoygiasStoryScraper extends BaseStoryScraper {
-  protected scraperOptions: ScraperOptions = {
+  protected options: ScraperOptions = {
     baseUrl: "https://boygias.com",
     maxChaptersPerPage: 10,
     reverseChapters: true,
