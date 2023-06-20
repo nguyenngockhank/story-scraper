@@ -8,8 +8,11 @@ import { StoryToMp3UseCase } from "../use-cases/StoryToMp3UseCase";
 import { EpubToMp3Payload } from "./Payload/EpubToMp3Payload";
 import { StoryToEpubPayload } from "./Payload/StoryToEpubPayload";
 import { EpubToStoryPayload } from "./Payload/EpubToStoryPayload";
+import { StoryToMp3Payload } from "./Payload/StoryToMp3Payload";
+import { ApiTags } from "@nestjs/swagger";
 
 @Controller()
+@ApiTags("Transformer")
 export class TransformerController {
   constructor(
     private epubToStoryUC: EpubToStoryUseCase,
@@ -28,12 +31,7 @@ export class TransformerController {
   @Post("api/transformer/story-to-mp3")
   storyToMp3(
     @Body()
-    payload: {
-      story: string;
-      fromChapter: number;
-      tempo?: number;
-      splitPerFolder?: number;
-    },
+    payload: StoryToMp3Payload,
   ) {
     const fromChapter =
       Number(payload.fromChapter) > 0 ? Number(payload.fromChapter) : 1;

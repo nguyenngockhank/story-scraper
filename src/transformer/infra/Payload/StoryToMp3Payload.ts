@@ -1,9 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { storyParam } from "./StoryToEpubPayload";
 
-// story: string;
-// splitPerFolder?: number;
-export class StoryToEpubPayload {
+export class StoryToMp3Payload {
   @ApiProperty(storyParam)
   story: string;
 
