@@ -13,7 +13,7 @@ import { ScraperContext } from "./core/CoreTypes";
 @Injectable()
 export class BachngocsachStoryScraper extends BaseStoryScraper {
   protected options = {
-    baseUrl: "https://bachngocsach.com/",
+    baseUrl: "https://bachngocsach.com.vn/",
     selectors: {
       chapterContent: "#noi-dung",
       chapterItems: "#mucluc-list li",
