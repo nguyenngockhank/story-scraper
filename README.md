@@ -10,11 +10,14 @@ $ npm install
 # development
 $ npm run start
 
-# watch mode
-$ npm run start:dev
+# watch mode & see the api list
+$ npm run dev
+
+Access to see api list http://localhost:3000/api
 
 # production mode
 $ npm run start:prod
+
 ```
 
 ## Packages

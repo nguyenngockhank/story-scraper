@@ -13,6 +13,17 @@ import { ThichTienHiepStoryScraper } from "./Scraper/ThichTienHiepStoryScraper";
 import { TangThuVienStoryScraper } from "./Scraper/TangThuVienStoryScraper";
 import { MetruyenchuStoryScraper } from "./Scraper/MetruyenchuStoryScraper";
 
+export enum SourceProvider {
+  truyenfull = "https://truyenfull.vn/",
+  boygias = "https://boygias.com",
+  sstruyen = "https://sstruyen.com",
+  tienhiep = "https://tienhiep.net",
+  dtruyen = "https://dtruyen.com",
+  thichtienhiep = "https://thichtienhiep.com",
+  tangthuvien = "https://truyen.tangthuvien.vn",
+  bachngocsach = "https://bachngocsach.com.vn/",
+}
+
 @Injectable()
 export class MemoryStoryScraperRepository implements StoryScraperRepository {
   private scraperMapping: Record<string, StoryScraper> = {};
