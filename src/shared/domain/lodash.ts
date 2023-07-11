@@ -7,6 +7,17 @@ import {
   intersectionBy,
   replace,
   trimEnd,
+  words,
 } from "lodash";
 
-export { chunk, map, first, last, sortBy, intersectionBy, replace, trimEnd };
+export {
+  words,
+  chunk,
+  map,
+  first,
+  last,
+  sortBy,
+  intersectionBy,
+  replace,
+  trimEnd,
+};

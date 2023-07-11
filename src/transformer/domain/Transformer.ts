@@ -6,6 +6,12 @@ export type StoryToMp3Options = {
   fromChapter?: number;
   tempo?: number;
   splitPerFolder?: number;
+  lang?: string;
+};
+
+export type TextToMp3Options = {
+  tempo?: number;
+  lang?: string;
 };
 
 export type StoryToEpubOptions = {
@@ -22,5 +28,5 @@ export interface Transformer {
 
   storyToMp3(story: Story, options?: StoryToMp3Options): Promise<FileName[]>;
 
-  textToMp3(text: string): Promise<void>;
+  textToMp3(text: string, options?: TextToMp3Options): Promise<FileName>;
 }

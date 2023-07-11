@@ -2,14 +2,14 @@ import * as googleTTS from "google-tts-api";
 import { Finder } from "../../../Shared/domain/Finder";
 import { convert } from "html-to-text";
 import { Mp3Processor } from "../../../Shared/domain/Mp3Processor";
-import { Downloader, DownloadItem } from "../../../Shared/domain/Downloader";
+import { Downloader, DownloadedItem } from "../../../Shared/domain/Downloader";
 
 type ConvertDir = { outputDir: string; tempDir: string };
 
 export type OutputOptions = {
   fileName: string;
   outputDir: string;
-  lang?: string;
+  lang: string;
   tempo?: number;
 };
 export class TextToMp3Transfomer {
@@ -18,33 +18,30 @@ export class TextToMp3Transfomer {
     private mp3Processor: Mp3Processor,
     private downloader: Downloader,
   ) {}
-  async execute(htmlText: string, outputOptions: OutputOptions): Promise<void> {
-    const outputFile = this.finder.build(
-      outputOptions.outputDir,
-      outputOptions.fileName,
-    );
+  async execute(htmlText: string, options: OutputOptions): Promise<void> {
+    const outputFile = this.finder.build(options.outputDir, options.fileName);
     if (this.finder.exists(outputFile)) {
       throw new Error("Outfile: " + outputFile + " exists!");
     }
 
-    const { tempDir } = this.prepareDirs(outputOptions);
+    const { tempDir } = this.prepareDirs(options);
     const content = this.filterContent(htmlText);
 
-    const downloadItems = await this.buildDownloadItems(content, {
+    const downloadedItems = await this.downloadItems(content, {
       tempDir,
-      lang: outputOptions.lang || "vi",
+      lang: options.lang,
     });
 
-    if (downloadItems.length === 0) {
+    if (downloadedItems.length === 0) {
       return;
     }
 
-    await this.downloader.downloadItems(downloadItems);
+    await this.downloader.downloadItems(downloadedItems);
 
     await this.mp3Processor.merge(
-      downloadItems.map((item) => item.output),
+      downloadedItems.map((item) => item.output),
       outputFile,
-      outputOptions.tempo,
+      options.tempo,
     );
 
     await this.finder.deleteDir(tempDir);
@@ -67,10 +64,10 @@ export class TextToMp3Transfomer {
     });
   }
 
-  private async buildDownloadItems(
+  private async downloadItems(
     content: string,
     options: { tempDir: string; lang: string },
-  ): Promise<DownloadItem[]> {
+  ): Promise<DownloadedItem[]> {
     try {
       const result = await googleTTS
         .getAllAudioUrls(content, {

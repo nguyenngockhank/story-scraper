@@ -1,16 +1,16 @@
 import axios from "axios";
 import * as retry from "retry";
 import * as fs from "fs";
-import { Downloader, DownloadItem } from "../domain/Downloader";
+import { Downloader, DownloadedItem } from "../domain/Downloader";
 import { chunk } from "../domain/lodash";
 
 export class DownloaderImpl implements Downloader {
   private batch = 10;
-  async downloadItem(item: DownloadItem): Promise<void> {
+  async downloadItem(item: DownloadedItem): Promise<void> {
     await this.download(item.output, item.url);
   }
 
-  async downloadItems(items: DownloadItem[]): Promise<void> {
+  async downloadItems(items: DownloadedItem[]): Promise<void> {
     const batches = chunk(items, this.batch);
 
     for (const items of batches) {

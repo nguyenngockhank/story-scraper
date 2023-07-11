@@ -10,6 +10,14 @@ import { StoryToEpubPayload } from "./Payload/StoryToEpubPayload";
 import { EpubToStoryPayload } from "./Payload/EpubToStoryPayload";
 import { StoryToMp3Payload } from "./Payload/StoryToMp3Payload";
 import { ApiTags } from "@nestjs/swagger";
+import { TextToMp3UserCase } from "../use-cases/TextToMp3UserCase";
+
+function numVal(
+  val?: string | number | undefined,
+  defValue = undefined,
+): number {
+  return Number(val) > 0 ? Number(val) : defValue;
+}
 
 @Controller()
 @ApiTags("Transformer")
@@ -21,6 +29,7 @@ export class TransformerController {
     private epubToMp3UC: EpubToMp3UseCase,
     private epubsToMp3UC: EpubsToMp3UseCase,
     private getEpubFilesUC: GetFilesUseCase,
+    private textToMp3UserCase: TextToMp3UserCase,
   ) {}
 
   @Post("api/transformer/epub-to-story")
@@ -33,13 +42,10 @@ export class TransformerController {
     @Body()
     payload: StoryToMp3Payload,
   ) {
-    const fromChapter =
-      Number(payload.fromChapter) > 0 ? Number(payload.fromChapter) : 1;
-    const tempo = Number(payload.tempo) > 0 ? Number(payload.tempo) : undefined;
-    const splitPerFolder =
-      Number(payload.splitPerFolder) > 0
-        ? Number(payload.splitPerFolder)
-        : undefined;
+    const fromChapter = numVal(payload.fromChapter, 1);
+    const tempo = numVal(payload.fromChapter, undefined);
+    const splitPerFolder = numVal(payload.splitPerFolder, undefined);
+
     return this.storyToMp3UC.execute(
       payload.story,
       fromChapter,
@@ -50,8 +56,7 @@ export class TransformerController {
 
   @Post("api/transformer/story-to-epub")
   storyToEpub(@Body() payload: StoryToEpubPayload) {
-    const chapPerFile =
-      Number(payload.chapPerFile) > 0 ? Number(payload.chapPerFile) : 100;
+    const chapPerFile = numVal(payload.chapPerFile, 100);
     return this.storyToEpubUC.execute(payload.story, chapPerFile);
   }
 
@@ -63,6 +68,13 @@ export class TransformerController {
   @Post("api/transformer/epubs-to-mp3")
   epubsToMp3(@Body() payload: { inputFiles: string[] }) {
     return this.epubsToMp3UC.execute(payload.inputFiles);
+  }
+
+  @Post("api/transformer/text-to-mp3")
+  textToMp3(@Body() payload: { text: string; tempo?: string; lang?: string }) {
+    const { text, lang } = payload;
+    const tempo = numVal(payload.tempo, undefined);
+    return this.textToMp3UserCase.execute(text, tempo, lang);
   }
 
   @Get("api/traverse/:ext")

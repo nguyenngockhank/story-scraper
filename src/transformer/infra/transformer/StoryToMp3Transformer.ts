@@ -16,6 +16,7 @@ export class StoryToMp3Transformer {
   ): Promise<FileName[]> {
     const fromChapter = options.fromChapter || 1;
     const tempo = options.tempo || 1;
+    const lang = options.lang || "vi";
 
     const chapters = await this.storyRepo.getChapterList(story);
     const processChapters = chapters.filter((c) => c.index >= fromChapter);
@@ -39,6 +40,7 @@ export class StoryToMp3Transformer {
         fileName: `${index}.mp3`,
         outputDir: storedPath,
         tempo,
+        lang,
       });
 
       result.push(this.finder.build(storedPath, `${index}.mp3`));

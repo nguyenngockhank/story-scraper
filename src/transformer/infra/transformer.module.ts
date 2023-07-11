@@ -10,6 +10,7 @@ import { StoryToEpubUseCase } from "../use-cases/StoryToEpubUseCase";
 import { EpubToMp3UseCase } from "../use-cases/EpubToMp3UseCase";
 import { GetFilesUseCase } from "../use-cases/GetFilesUseCase";
 import { EpubsToMp3UseCase } from "../use-cases/EpubsToMp3UseCase";
+import { TextToMp3UserCase } from "../use-cases/TextToMp3UserCase";
 
 @Module({
   controllers: [TransformerController],
@@ -22,6 +23,7 @@ import { EpubsToMp3UseCase } from "../use-cases/EpubsToMp3UseCase";
     EpubToMp3UseCase,
     EpubsToMp3UseCase,
     GetFilesUseCase,
+    TextToMp3UserCase,
 
     // domain & infra
     {

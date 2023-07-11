@@ -1,9 +1,9 @@
-export type DownloadItem = {
+export type DownloadedItem = {
   output: string;
   url: string;
 };
 
 export interface Downloader {
-  downloadItem(item: DownloadItem): Promise<void>;
-  downloadItems(items: DownloadItem[]): Promise<void>;
+  downloadItem(item: DownloadedItem): Promise<void>;
+  downloadItems(items: DownloadedItem[]): Promise<void>;
 }

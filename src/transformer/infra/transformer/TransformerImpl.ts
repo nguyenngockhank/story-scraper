@@ -12,6 +12,7 @@ import {
   FileName,
   StoryToEpubOptions,
   StoryToMp3Options,
+  TextToMp3Options,
   Transformer,
 } from "../../domain/Transformer";
 import { transformerItems } from "../../domain/TransformerContainer";
@@ -19,6 +20,7 @@ import { TextToMp3Transfomer } from "./TextToMp3Transfomer";
 import { Downloader } from "../../../Shared/domain/Downloader";
 import { StoryToMp3Transformer } from "./StoryToMp3Transformer";
 import { StoryToEpubTransformer } from "./StoryToEpubTransformer";
+import { words } from "../../../Shared/domain/lodash";
 
 @Injectable()
 export class TransformerImpl implements Transformer {
@@ -83,7 +85,22 @@ export class TransformerImpl implements Transformer {
   ): Promise<FileName[]> {
     return this.storyToMp3Transformer.execute(story, options);
   }
-  textToMp3(text: string): Promise<void> {
-    throw new Error("Method not implemented.");
+
+  async textToMp3(text: string, options: TextToMp3Options): Promise<FileName> {
+    const listWords = words(text);
+    const maxLength = Math.min(listWords.length, 5);
+    listWords.length = maxLength;
+
+    const outputFile = `${listWords.join("-")}-${new Date().getTime()}.mp3`;
+    const outputDir = `audio/text/`;
+
+    await this.textToMp3Transformer.execute(text, {
+      outputDir,
+      fileName: outputFile,
+      lang: options.lang || "vi",
+      ...options,
+    });
+
+    return outputDir + outputFile;
   }
 }
