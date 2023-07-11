@@ -87,20 +87,16 @@ export class TransformerImpl implements Transformer {
   }
 
   async textToMp3(text: string, options: TextToMp3Options): Promise<FileName> {
-    const listWords = words(text);
-    const maxLength = Math.min(listWords.length, 5);
-    listWords.length = maxLength;
-
-    const outputFile = `${listWords.join("-")}-${new Date().getTime()}.mp3`;
+    const fileName = options.fileName;
     const outputDir = `audio/text/`;
 
     await this.textToMp3Transformer.execute(text, {
       outputDir,
-      fileName: outputFile,
-      lang: options.lang || "vi",
+      fileName,
+      lang: options.lang || "en",
       ...options,
     });
 
-    return outputDir + outputFile;
+    return outputDir + fileName;
   }
 }

@@ -1,4 +1,5 @@
 import { Injectable, Inject } from "../../Shared/domain/AppContainer";
+import { words } from "../../Shared/domain/lodash";
 import { Transformer } from "../domain/Transformer";
 import { transformerItems } from "../domain/TransformerContainer";
 
@@ -9,23 +10,34 @@ export class TextToMp3UserCase {
     private transformer: Transformer,
   ) {}
 
-  async execute(text: string, tempo?: number, lang?: string): Promise<string> {
+  async execute(
+    text: string,
+    options: { lang?: string; fileName?: string },
+  ): Promise<string> {
     console.log("STARTED process text to mp3:", {
-      length: text,
-      tempo,
-      lang,
+      length: text.length,
+      ...options,
     });
 
+    const fileName = options.fileName || this.buildFilename(text);
     const result = await this.transformer.textToMp3(text, {
-      tempo,
-      lang,
+      fileName,
+      lang: options.lang,
     });
 
     console.log("ENDED process text to mp3:", {
       text,
-      tempo,
-      lang,
+      ...options,
+      fileName,
     });
     return result;
+  }
+
+  private buildFilename(content: string): string {
+    const listWords = words(content);
+    const maxLength = Math.min(listWords.length, 3);
+    listWords.length = maxLength;
+    const fileName = `${listWords.join("-")}-${new Date().getTime()}.mp3`;
+    return fileName;
   }
 }

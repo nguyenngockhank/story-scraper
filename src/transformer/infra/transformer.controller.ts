@@ -1,4 +1,14 @@
-import { Controller, Post, Body, Get, Param, Query } from "@nestjs/common";
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Query,
+  UseInterceptors,
+  UploadedFile,
+  UploadedFiles,
+} from "@nestjs/common";
 import { EpubsToMp3UseCase } from "../use-cases/EpubsToMp3UseCase";
 import { EpubToMp3UseCase } from "../use-cases/EpubToMp3UseCase";
 import { EpubToStoryUseCase } from "../use-cases/EpubToStoryUseCase";
@@ -11,6 +21,13 @@ import { EpubToStoryPayload } from "./Payload/EpubToStoryPayload";
 import { StoryToMp3Payload } from "./Payload/StoryToMp3Payload";
 import { ApiTags } from "@nestjs/swagger";
 import { TextToMp3UserCase } from "../use-cases/TextToMp3UserCase";
+import {
+  AnyFilesInterceptor,
+  FileFieldsInterceptor,
+  FileInterceptor,
+} from "@nestjs/platform-express/multer";
+import { FileToMp3UserCase } from "../use-cases/FileToMp3UserCase";
+import { FilesToMp3UserCase } from "../use-cases/FilesToMp3UserCase";
 
 function numVal(
   val?: string | number | undefined,
@@ -30,6 +47,8 @@ export class TransformerController {
     private epubsToMp3UC: EpubsToMp3UseCase,
     private getEpubFilesUC: GetFilesUseCase,
     private textToMp3UserCase: TextToMp3UserCase,
+    private fileToMp3UserCase: FileToMp3UserCase,
+    private filesToMp3UserCase: FilesToMp3UserCase,
   ) {}
 
   @Post("api/transformer/epub-to-story")
@@ -71,10 +90,28 @@ export class TransformerController {
   }
 
   @Post("api/transformer/text-to-mp3")
-  textToMp3(@Body() payload: { text: string; tempo?: string; lang?: string }) {
+  textToMp3(@Body() payload: { text: string; lang?: string }) {
     const { text, lang } = payload;
-    const tempo = numVal(payload.tempo, undefined);
-    return this.textToMp3UserCase.execute(text, tempo, lang);
+    return this.textToMp3UserCase.execute(text, { lang });
+  }
+
+  @Post("api/transformer/file-to-mp3")
+  @UseInterceptors(FileInterceptor("file"))
+  fileToMp3(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() payload: { lang?: string },
+  ) {
+    return this.fileToMp3UserCase.execute(file, payload.lang || "en");
+  }
+
+  @Post("api/transformer/files-to-mp3")
+  @UseInterceptors(AnyFilesInterceptor())
+  filesToMp3(
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @Body() payload: { lang?: string },
+  ) {
+    console.log(files);
+    return this.filesToMp3UserCase.execute(files, payload.lang || "en");
   }
 
   @Get("api/traverse/:ext")

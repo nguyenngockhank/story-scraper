@@ -11,10 +11,18 @@ import { EpubToMp3UseCase } from "../use-cases/EpubToMp3UseCase";
 import { GetFilesUseCase } from "../use-cases/GetFilesUseCase";
 import { EpubsToMp3UseCase } from "../use-cases/EpubsToMp3UseCase";
 import { TextToMp3UserCase } from "../use-cases/TextToMp3UserCase";
+import { MulterModule } from "@nestjs/platform-express";
+import { FileToMp3UserCase } from "../use-cases/FileToMp3UserCase";
+import { FilesToMp3UserCase } from "../use-cases/FilesToMp3UserCase";
 
 @Module({
   controllers: [TransformerController],
-  imports: [StoryModule],
+  imports: [
+    StoryModule,
+    MulterModule.register({
+      dest: "./upload",
+    }),
+  ],
   providers: [
     // use cases
     EpubToStoryUseCase,
@@ -24,6 +32,8 @@ import { TextToMp3UserCase } from "../use-cases/TextToMp3UserCase";
     EpubsToMp3UseCase,
     GetFilesUseCase,
     TextToMp3UserCase,
+    FileToMp3UserCase,
+    FilesToMp3UserCase,
 
     // domain & infra
     {

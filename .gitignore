@@ -403,3 +403,5 @@ audio/*
 football/*
 epub/*
 !epub/index.html
+upload/*
+!upload/index.html

@@ -10,6 +10,7 @@ export type StoryToMp3Options = {
 };
 
 export type TextToMp3Options = {
+  fileName: string;
   tempo?: number;
   lang?: string;
 };

@@ -16,6 +16,10 @@ export class Finder {
     fs.writeFileSync(filePath, buffer);
   }
 
+  readFile(filePath: string): string {
+    return fs.readFileSync(filePath, { encoding: "utf-8" });
+  }
+
   build(...args: string[]): string {
     return path.join(...args);
   }
