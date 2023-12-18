@@ -23,6 +23,14 @@ export class StoryToMp3Payload {
 
   @ApiProperty({
     type: Number,
+    description: "The chapter where to end",
+    default: 1,
+    required: false,
+  })
+  toChapter?: number;
+
+  @ApiProperty({
+    type: Number,
     description: "Output will be splitted multiple folders if given this param",
     default: 1,
     required: false,

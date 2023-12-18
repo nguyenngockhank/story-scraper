@@ -62,15 +62,16 @@ export class TransformerController {
     payload: StoryToMp3Payload,
   ) {
     const fromChapter = numVal(payload.fromChapter, 1);
-    const tempo = numVal(payload.fromChapter, undefined);
+    const toChapter = numVal(payload.toChapter, 10000);
+    const tempo = numVal(payload.tempo, undefined);
     const splitPerFolder = numVal(payload.splitPerFolder, undefined);
 
-    return this.storyToMp3UC.execute(
-      payload.story,
+    return this.storyToMp3UC.execute(payload.story, {
       fromChapter,
+      toChapter,
       tempo,
       splitPerFolder,
-    );
+    });
   }
 
   @Post("api/transformer/story-to-epub")

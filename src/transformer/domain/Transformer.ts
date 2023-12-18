@@ -3,6 +3,7 @@ import { Story } from "../../Story/domain/StoryRepository";
 export type FileName = string;
 
 export type StoryToMp3Options = {
+  toChapter?: number;
   fromChapter?: number;
   tempo?: number;
   splitPerFolder?: number;

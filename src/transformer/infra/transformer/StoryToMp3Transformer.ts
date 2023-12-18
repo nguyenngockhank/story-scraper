@@ -15,11 +15,14 @@ export class StoryToMp3Transformer {
     options?: StoryToMp3Options,
   ): Promise<FileName[]> {
     const fromChapter = options.fromChapter || 1;
+    const toChapter = options.toChapter || Number.MAX_SAFE_INTEGER;
     const tempo = options.tempo || 1;
     const lang = options.lang || "vi";
 
     const chapters = await this.storyRepo.getChapterList(story);
-    const processChapters = chapters.filter((c) => c.index >= fromChapter);
+    const processChapters = chapters.filter(
+      (c) => c.index >= fromChapter && c.index <= toChapter,
+    );
 
     if (processChapters.length === 0) {
       throw new Error("No chapters found!");

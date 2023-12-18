@@ -12,6 +12,8 @@ import { Tienhiep2StoryScraper } from "./Scraper/Tienhiep2StoryScraper";
 import { ThichTienHiepStoryScraper } from "./Scraper/ThichTienHiepStoryScraper";
 import { TangThuVienStoryScraper } from "./Scraper/TangThuVienStoryScraper";
 import { MetruyenchuStoryScraper } from "./Scraper/MetruyenchuStoryScraper";
+import { TruyenmoiStoryScraper } from "./Scraper/TruyenmoiStoryScraper";
+import { TruyenchuScraper } from "./Scraper/TruyenchuScraper";
 
 export enum SourceProvider {
   truyenfull = "https://truyenfull.vn/",
@@ -22,6 +24,8 @@ export enum SourceProvider {
   thichtienhiep = "https://thichtienhiep.com",
   tangthuvien = "https://truyen.tangthuvien.vn",
   bachngocsach = "https://bachngocsach.com.vn/",
+  truyenmoi = "https://truyenmoi.org",
+  truyenchu = "https://truyenchu.vn",
 }
 
 @Injectable()
@@ -39,6 +43,8 @@ export class MemoryStoryScraperRepository implements StoryScraperRepository {
     thichTienHiepStoryScraper: ThichTienHiepStoryScraper,
     tangThuVienStoryScraper: TangThuVienStoryScraper,
     metruyenchuStoryScraper: MetruyenchuStoryScraper,
+    truyenmoiStoryScraper: TruyenmoiStoryScraper,
+    truyenchuScraper: TruyenchuScraper,
   ) {
     this.scraperMapping["truyenfull"] = truyenfullScraper;
     this.scraperMapping["boygias"] = boygiasScraper;
@@ -50,6 +56,8 @@ export class MemoryStoryScraperRepository implements StoryScraperRepository {
     this.scraperMapping["thichtienhiep"] = thichTienHiepStoryScraper;
     this.scraperMapping["tangthuvien"] = tangThuVienStoryScraper;
     this.scraperMapping["metruyenchu"] = metruyenchuStoryScraper;
+    this.scraperMapping["truyenmoi"] = truyenmoiStoryScraper;
+    this.scraperMapping["truyenchu"] = truyenchuScraper;
   }
 
   getScraperByUrl(url: string): StoryScraper {

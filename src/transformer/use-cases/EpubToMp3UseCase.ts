@@ -11,6 +11,8 @@ export class EpubToMp3UseCase {
 
   async execute(inputFile: string): Promise<string[]> {
     const story = await this.epubToStoryUC.execute(inputFile);
-    return this.storyToMp3UC.execute(story);
+    return this.storyToMp3UC.execute(story, {
+      fromChapter: 1,
+    });
   }
 }

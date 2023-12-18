@@ -11,18 +11,25 @@ export class StoryToMp3UseCase {
 
   async execute(
     story: string,
-    fromChapter = 1,
-    tempo?: number,
-    splitPerFolder?: number,
+    options: {
+      fromChapter: number;
+      toChapter?: number;
+      tempo?: number;
+      splitPerFolder?: number;
+    },
   ): Promise<string[]> {
+    const { fromChapter, toChapter, tempo, splitPerFolder } = options;
     console.log("STARTED process story to mp3:", {
       fromChapter,
+      toChapter,
       story,
       tempo,
       splitPerFolder,
     });
+
     const result = await this.transformer.storyToMp3(story, {
       fromChapter,
+      toChapter,
       tempo,
       splitPerFolder,
     });
