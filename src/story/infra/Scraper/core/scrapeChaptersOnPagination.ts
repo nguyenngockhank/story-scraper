@@ -23,7 +23,7 @@ export type BuildChapterPageUrlCallback = (
 ) => string | Promise<string>;
 
 export type ScraperCallbacks = {
-  buildChapterPage: BuildChapterPageUrlCallback;
+  buildChapterPageUrl: BuildChapterPageUrlCallback;
   nodeToChapter?: NodeToChapterCallback;
   buildChaptersFromPage?: BuildChaptersFromPageCallback;
 };
@@ -77,7 +77,7 @@ async function scrapeChapterUrlListPage(
   const { scraper, options } = context;
 
   // build chapter list page index
-  const chapterUrlResult = callbacks.buildChapterPage(context, pageIndex);
+  const chapterUrlResult = callbacks.buildChapterPageUrl(context, pageIndex);
   let chapterUrl = "";
   if (typeof chapterUrlResult === "string") {
     chapterUrl = chapterUrlResult;

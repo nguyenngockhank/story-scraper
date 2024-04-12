@@ -64,7 +64,7 @@ export abstract class BaseStoryScraper implements StoryScraper {
     const chapters =
       scrapeChaptersType !== "onApi"
         ? await scrapeChaptersOnPagination(context, {
-            buildChapterPage: this.buildChapterPageUrl.bind(this),
+            buildChapterPageUrl: this.buildChapterPageUrl.bind(this),
             nodeToChapter: this.nodeToChapter?.bind(this),
             buildChaptersFromPage: this.buildChaptersFromPage?.bind(this),
           })

@@ -8,21 +8,15 @@ import { Chapter } from "../../domain/Chapter";
 import { storyItems } from "../../domain/StoryContainer";
 import { StoryRepository } from "../../domain/StoryRepository";
 import { BaseStoryScraper } from "./core/BaseStoryScraper";
-import cheerio, { CheerioAPI } from "cheerio";
-import {
-  ChapterWithoutIndex,
-  ScraperContext,
-  ScraperOptions,
-} from "./core/CoreTypes";
+import { ScraperContext } from "./core/CoreTypes";
 
 @Injectable()
-export class TruyenchuScraper extends BaseStoryScraper {
-  protected options: ScraperOptions = {
-    baseUrl: "https://truyenchu.vn/",
-    scrapeChaptersType: "onApi",
+export class Truyen35Scraper extends BaseStoryScraper {
+  protected options = {
+    baseUrl: "https://truyen35.vn/",
     maxChaptersPerPage: 50,
     selectors: {
-      chapterContent: "#chapter-c",
+      chapterContent: ".chapter-content",
       chapterItems: ".list-chapter li",
     },
   };
@@ -41,28 +35,12 @@ export class TruyenchuScraper extends BaseStoryScraper {
     { storyName, options }: ScraperContext,
     pageIndex: number,
   ): string {
-    return `${options.baseUrl}api/services/list-chapter?type=list_chapter&tascii=${storyName}&page=${pageIndex}`;
-  }
-
-  protected toChapters(
-    context: ScraperContext,
-    jsonData: any,
-  ): ChapterWithoutIndex[] {
-    const { options } = context;
-    const $ = cheerio.load(jsonData.chap_list);
-
-    const result: ChapterWithoutIndex[] = [];
-    $(options.selectors.chapterItems).each((i, el) => {
-      const chapter = this.nodeToChapter(context, $(el));
-      result.push(chapter);
-    });
-
-    return result;
+    return `${options.baseUrl}${storyName}?page=${pageIndex}`;
   }
 
   nodeToChapter = (context, $el: WrappedNode): Omit<Chapter, "index"> => {
     return {
-      url: this.options.baseUrl + $el.find("a").attr("href").trim(),
+      url: $el.find("a").attr("href").trim(),
       title: $el.text().trim(),
     };
   };

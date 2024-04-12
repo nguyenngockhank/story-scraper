@@ -26,25 +26,40 @@ export async function scrapeChaptersOnApi(
   context: ScraperContext,
   callbacks: ScraperCallbacks,
 ): Promise<Chapter[]> {
-  const { scraper, options } = context;
-  // start scraping
-  const chapterListUrl = await callbacks.buildChapterPage(context, 0);
-  const data = await scraper.fetch(chapterListUrl, {
-    retryAttempt: 1,
-  });
+  const { options } = context;
 
-  const jsonData = typeof data === "string" ? JSON.parse(data) : data;
-  console.log(jsonData);
-  const result: ChapterWithoutIndex[] = callbacks.toChapters(context, jsonData);
+  const allChapters: ChapterWithoutIndex[] = [];
+  for (let index = 1; true; index++) {
+    const chapters = await scrapeOnPageIndex(context, callbacks, index);
+    allChapters.push(...chapters);
+    if (chapters.length < options.maxChaptersPerPage) {
+      break;
+    }
+  }
 
   // enrich index
   let chapterIndex = 1;
-  const chapters = result.map((c) => ({
+  const result = allChapters.map((c) => ({
     ...c,
     index: chapterIndex++,
   }));
 
-  console.log(">> chapters length: ", chapters.length);
+  console.log(">> chapters length: ", result.length);
+  return result;
+}
 
-  return chapters;
+async function scrapeOnPageIndex(
+  context: ScraperContext,
+  callbacks: ScraperCallbacks,
+  index: number,
+): Promise<ChapterWithoutIndex[]> {
+  const { scraper } = context;
+  const chapterListUrl = await callbacks.buildChapterPage(context, index);
+  const data = await scraper.fetch(chapterListUrl, {
+    retryAttempt: 3,
+  });
+
+  const jsonData = typeof data === "string" ? JSON.parse(data) : data;
+  const result: ChapterWithoutIndex[] = callbacks.toChapters(context, jsonData);
+  return result;
 }

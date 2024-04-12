@@ -16,7 +16,7 @@ export async function scrapeChapterContent(
   },
 ): Promise<ChapterContent> {
   const $ = await scraper.fetchWrappedDOM(chapter.url);
-  let content = $(options.selectors.chapterContent).html().trim();
+  let content = $(options.selectors.chapterContent).html()?.trim();
 
   if (filters.content) {
     content = filters.content(content, $(content));
