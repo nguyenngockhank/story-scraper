@@ -38,6 +38,8 @@ export class StoryToMp3Transformer {
 
       const html = chapterContent.content;
 
+      // NOTE: filter html
+
       const storedPath = this.buildStoredFolder(story, index, options);
       await this.textToMp3Transformer.execute(html, {
         fileName: `${index}.mp3`,

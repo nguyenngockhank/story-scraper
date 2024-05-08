@@ -58,10 +58,17 @@ export class TextToMp3Transfomer {
   }
 
   private filterContent(htmlText: string): string {
-    return convert(htmlText, {
+    const str = convert(htmlText, {
       ignoreImage: true,
       wordwrap: 150,
     });
+
+    const [first] = str.split(
+      "Team chúng mình biết quảng cáo Popup sẽ khiến Quý đọc giả khó chịu khi trải nghiệm",
+    );
+
+    const urlTrimed = first.replace(/(?:https?|ftp):\/\/[\n\S]+/g, "");
+    return urlTrimed;
   }
 
   private async downloadItems(

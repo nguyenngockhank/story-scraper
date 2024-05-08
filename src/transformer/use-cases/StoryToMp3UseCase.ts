@@ -19,6 +19,7 @@ export class StoryToMp3UseCase {
     },
   ): Promise<string[]> {
     const { fromChapter, toChapter, tempo, splitPerFolder } = options;
+
     console.log("STARTED process story to mp3:", {
       fromChapter,
       toChapter,
