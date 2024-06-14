@@ -15,6 +15,10 @@ export class DoctruyenchufulXyzScraper extends BaseStoryScraper {
   public options = {
     baseUrl: "https://doctruyenchufull.xyz/",
     maxChaptersPerPage: 20,
+    batch: {
+      numberItems: 5,
+      sleepMs: 3000,
+    },
     selectors: {
       chapterContent: ".blog-post-body",
       chapterItems: "#danh_sach_chuong li",

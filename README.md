@@ -101,6 +101,6 @@ docker push nguyenngockhank/truyen
 ```
 
 ```
-docker run -dp 127.0.0.1:3000:3000 -v /Users/nguyenkhanh/Documents/truyendb:/app/db -v /Users/nguyenkhanh/Documents/truyenaudio:/app/audio truyen
+docker run -dp 127.0.0.1:3333:3000 -v ~/Documents/truyendb:/app/db -v ~/Documents/truyenaudio:/app/audio truyen 
 ```
 

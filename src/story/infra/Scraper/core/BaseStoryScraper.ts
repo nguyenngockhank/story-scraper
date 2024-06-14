@@ -19,6 +19,12 @@ import {
 } from "./CoreTypes";
 import { ContentFilter, scrapeChapterContent } from "./scrapeChapterContent";
 import { scrapeChaptersOnApi } from "./scrapeChaptersOnApi";
+import { sleep } from "./sleep";
+
+type FetchChapterContentResponse = {
+  existed: boolean;
+  content: ChapterContent;
+};
 
 export abstract class BaseStoryScraper implements StoryScraper {
   public options: ScraperOptions;
@@ -102,26 +108,37 @@ export abstract class BaseStoryScraper implements StoryScraper {
     );
 
     const result: ChapterContent[] = [];
-    const batches = chunk(chapters, 10);
+
+    const { numberItems = 10, sleepMs = 0 } = this.options.batch;
+
+    const batches = chunk(chapters, numberItems || 10);
+    let index = 1;
     for (const batch of batches) {
-      const batchResult: ChapterContent[] = await Promise.all(
+      console.log(">>> start batch ", index++);
+      const batchResult: FetchChapterContentResponse[] = await Promise.all(
         batch.map((c) => this.fetchChapterContent(story, c)),
       );
-      result.push(...batchResult);
+      const cached = batchResult.every((result) => result.existed);
+      if (!cached) {
+        await sleep(sleepMs || 0);
+      }
+      result.push(...batchResult.map((item) => item.content));
     }
+
+    console.log(">>> ended scrape chapters");
     return result;
   }
 
   private async fetchChapterContent(
     story: string,
     chapter: Chapter,
-  ): Promise<ChapterContent> {
+  ): Promise<FetchChapterContentResponse> {
     const item: ChapterContent = await this.storyRepository.getChapterContent(
       story,
       chapter.index,
     );
     if (item) {
-      return item;
+      return { existed: true, content: item };
     }
 
     const context: ScraperContext = {
@@ -139,6 +156,6 @@ export abstract class BaseStoryScraper implements StoryScraper {
       ...chapterContent,
     };
     await this.storyRepository.saveChapterContent(story, result);
-    return result;
+    return { existed: false, content: result };
   }
 }

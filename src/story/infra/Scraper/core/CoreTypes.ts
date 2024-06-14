@@ -6,6 +6,11 @@ export type ChapterWithoutIndex = Omit<Chapter, "index">;
 
 export type ScraperOptions = {
   baseUrl: string;
+  batch?: {
+    numberItems?: number;
+    sleepMs?: number;
+  };
+  sleepEachBatchMs?: number;
   maxChaptersPerPage?: number;
   reverseChapters?: boolean;
   scrapeChaptersType?: "onPagination" | "onApi";
