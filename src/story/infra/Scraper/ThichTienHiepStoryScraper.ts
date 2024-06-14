@@ -12,7 +12,7 @@ import { ContentFilter } from "./core/scrapeChapterContent";
 
 @Injectable()
 export class ThichTienHiepStoryScraper extends BaseStoryScraper {
-  protected options = {
+  public options = {
     baseUrl: "https://thichtienhiep.com",
     maxChaptersPerPage: 0,
     selectors: {

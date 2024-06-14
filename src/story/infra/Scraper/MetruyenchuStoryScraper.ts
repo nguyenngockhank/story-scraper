@@ -17,7 +17,7 @@ import {
 
 @Injectable()
 export class MetruyenchuStoryScraper extends BaseStoryScraper {
-  protected options: ScraperOptions = {
+  public options: ScraperOptions = {
     baseUrl: "https://metruyenchu.com",
     scrapeChaptersType: "onApi",
     selectors: {

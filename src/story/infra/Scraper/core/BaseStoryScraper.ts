@@ -21,7 +21,7 @@ import { ContentFilter, scrapeChapterContent } from "./scrapeChapterContent";
 import { scrapeChaptersOnApi } from "./scrapeChaptersOnApi";
 
 export abstract class BaseStoryScraper implements StoryScraper {
-  protected options: ScraperOptions;
+  public options: ScraperOptions;
 
   constructor(
     protected scraper: Scraper,

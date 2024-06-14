@@ -12,7 +12,7 @@ import { ScraperContext, ScraperOptions } from "./core/CoreTypes";
 
 @Injectable()
 export class DtruyenStoryScraper extends BaseStoryScraper {
-  protected options: ScraperOptions = {
+  public options: ScraperOptions = {
     baseUrl: "https://dtruyen.com",
     maxChaptersPerPage: 30,
     selectors: {

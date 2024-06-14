@@ -12,7 +12,7 @@ import { ScraperContext } from "./core/CoreTypes";
 
 @Injectable()
 export class TangThuVienStoryScraper extends BaseStoryScraper {
-  protected options = {
+  public options = {
     baseUrl: "https://truyen.tangthuvien.vn",
     noWrappedNode: true,
     maxChaptersPerPage: 100,

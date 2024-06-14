@@ -17,7 +17,7 @@ import {
 
 @Injectable()
 export class TruyenchuScraper extends BaseStoryScraper {
-  protected options: ScraperOptions = {
+  public options: ScraperOptions = {
     baseUrl: "https://truyenchu.vn/",
     scrapeChaptersType: "onApi",
     maxChaptersPerPage: 50,

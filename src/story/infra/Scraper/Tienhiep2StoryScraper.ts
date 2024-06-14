@@ -3,7 +3,7 @@ import { TienhiepStoryScraper } from "./TienhiepStoryScraper";
 
 @Injectable()
 export class Tienhiep2StoryScraper extends TienhiepStoryScraper {
-  protected options = {
+  public options = {
     baseUrl: "https://tienhiep2.net",
     maxChaptersPerPage: 50,
     selectors: {

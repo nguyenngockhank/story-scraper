@@ -13,7 +13,7 @@ import { ScraperContext } from "./core/CoreTypes";
 
 @Injectable()
 export class TienhiepStoryScraper extends BaseStoryScraper {
-  protected options = {
+  public options = {
     baseUrl: "https://tienhiep.net",
     maxChaptersPerPage: 50,
     selectors: {

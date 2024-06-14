@@ -15,6 +15,7 @@ import { MetruyenchuStoryScraper } from "./Scraper/MetruyenchuStoryScraper";
 import { TruyenmoiStoryScraper } from "./Scraper/TruyenmoiStoryScraper";
 import { TruyenchuScraper } from "./Scraper/TruyenchuScraper";
 import { Truyen35Scraper } from "./Scraper/Truyen35Scraper";
+import { DoctruyenchufulXyzScraper } from "./Scraper/DoctruyenchufulXyzScraper";
 
 export enum SourceProvider {
   truyenfull = "https://truyenfull.vn/",
@@ -24,9 +25,10 @@ export enum SourceProvider {
   dtruyen = "https://dtruyen.com",
   thichtienhiep = "https://thichtienhiep.com",
   tangthuvien = "https://truyen.tangthuvien.vn",
-  bachngocsach = "https://bachngocsach.com.vn/",
+  bachngocsach = "https://bachngocsach.com.vn",
   truyenmoi = "https://truyenmoi.org",
   truyenchu = "https://truyenchu.vn",
+  doctruyenchufulxyz = "https://doctruyenchufull.xyz",
 }
 
 @Injectable()
@@ -37,6 +39,7 @@ export class MemoryStoryScraperRepository implements StoryScraperRepository {
     truyenfullScraper: TruyenfullStoryScraper,
     truyen35Scraper: Truyen35Scraper,
     boygiasScraper: BoygiasStoryScraper,
+    doctruyenchufulXyzScraper: DoctruyenchufulXyzScraper,
     sstruyenScraper: SstruyenStoryScraper,
     tienhiepScraper: TienhiepStoryScraper,
     tienhiep2Scraper: Tienhiep2StoryScraper,
@@ -48,6 +51,7 @@ export class MemoryStoryScraperRepository implements StoryScraperRepository {
     truyenmoiStoryScraper: TruyenmoiStoryScraper,
     truyenchuScraper: TruyenchuScraper,
   ) {
+    this.scraperMapping["doctruyenchufulxyz"] = doctruyenchufulXyzScraper;
     this.scraperMapping["truyenfull"] = truyenfullScraper;
     this.scraperMapping["boygias"] = boygiasScraper;
     this.scraperMapping["sstruyen"] = sstruyenScraper;
@@ -65,8 +69,8 @@ export class MemoryStoryScraperRepository implements StoryScraperRepository {
 
   getScraperByUrl(url: string): StoryScraper {
     let result: StoryScraper | null = null;
-    map(this.scraperMapping, (scraper: StoryScraper, name: string) => {
-      if (url.indexOf(name) > 0) {
+    map(this.scraperMapping, (scraper: StoryScraper) => {
+      if (url.includes(scraper.options.baseUrl)) {
         result = scraper;
       }
     });

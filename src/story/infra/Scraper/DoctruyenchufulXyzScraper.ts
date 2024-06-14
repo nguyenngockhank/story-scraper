@@ -11,13 +11,13 @@ import { BaseStoryScraper } from "./core/BaseStoryScraper";
 import { ScraperContext } from "./core/CoreTypes";
 
 @Injectable()
-export class Truyen35Scraper extends BaseStoryScraper {
+export class DoctruyenchufulXyzScraper extends BaseStoryScraper {
   public options = {
-    baseUrl: "https://truyen35.vn/",
-    maxChaptersPerPage: 50,
+    baseUrl: "https://doctruyenchufull.xyz/",
+    maxChaptersPerPage: 20,
     selectors: {
-      chapterContent: ".chapter-content",
-      chapterItems: ".list-chapter li",
+      chapterContent: ".blog-post-body",
+      chapterItems: "#danh_sach_chuong li",
     },
   };
 
@@ -35,7 +35,9 @@ export class Truyen35Scraper extends BaseStoryScraper {
     { storyName, options }: ScraperContext,
     pageIndex: number,
   ): string {
-    return `${options.baseUrl}${storyName}?page=${pageIndex}`;
+    if (pageIndex === 1) return `${options.baseUrl}${storyName}`;
+
+    return `${options.baseUrl}${storyName}/${pageIndex}`;
   }
 
   nodeToChapter = (context, $el: WrappedNode): Omit<Chapter, "index"> => {

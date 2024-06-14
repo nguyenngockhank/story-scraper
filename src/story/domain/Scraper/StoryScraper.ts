@@ -1,3 +1,4 @@
+import { ScraperOptions } from "../../infra/Scraper/core/CoreTypes";
 import { Chapter } from "../Chapter";
 import { ChapterContent } from "../ChapterContent";
 import { Story } from "../StoryRepository";
@@ -10,6 +11,7 @@ export type StoryMetaData = {
 };
 
 export interface StoryScraper {
+  options: ScraperOptions;
   fetchChapters(story: string, metadata?: StoryMetaData): Promise<Chapter[]>;
   fetchChapterContents(
     story: Story,
