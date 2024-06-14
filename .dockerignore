@@ -1,0 +1,4 @@
+**/audio/
+!**/audio/index.html
+**/db/
+!**/db/index.html

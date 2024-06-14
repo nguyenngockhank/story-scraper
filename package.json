@@ -17,7 +17,10 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "scrape": "curl -d \"@./data/scrape-story.json\" -H \"Content-Type: application/json\"  http://localhost:3000/api/story/scrape",
+    "story:mp3": "curl -d \"@./data/story-to-mp3.json\" -H \"Content-Type: application/json\"  http://localhost:3000/api/transformer/story-to-mp3",
+    "story:mp3:2": "curl -d \"@./data/story-to-mp3-v2.json\" -H \"Content-Type: application/json\"  http://localhost:3000/api/transformer/story-to-mp3"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",

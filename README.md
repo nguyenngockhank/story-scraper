@@ -89,3 +89,18 @@ reload IDE
 ```bash
 npm i nedb retry promisify axios cheerio 
 ```
+
+## Docker
+
+```
+docker build -t nguyenngockhank/truyen .
+```
+
+```
+docker push nguyenngockhank/truyen
+```
+
+```
+docker run -dp 127.0.0.1:3000:3000 -v /Users/nguyenkhanh/Documents/truyendb:/app/db -v /Users/nguyenkhanh/Documents/truyenaudio:/app/audio truyen
+```
+
