@@ -7,20 +7,23 @@ export class ScrapeStoryByUrlUseCase {
     @Inject(storyItems.StoryScraperRepository)
     private scraperRepo: StoryScraperRepository,
   ) {}
-  async execute(url: string): Promise<void> {
+  async execute(
+    url: string,
+    storyMetadata: Record<string, any>,
+  ): Promise<void> {
     const scraper = this.scraperRepo.getScraperByUrl(url);
 
     const story = scraper.extractStory(url);
 
-    const metaData = await scraper.fetchStoryMetadata(url);
+    const builtMetaData = await scraper.fetchStoryMetadata(url);
 
     console.log("STARTED scrape story :", {
       url,
-      metaData,
+      builtMetaData,
       story,
     });
 
-    await scraper.fetchChapters(story, metaData);
-    await scraper.fetchChapterContents(story, metaData);
+    await scraper.fetchChapters(story, { ...builtMetaData, ...storyMetadata });
+    await scraper.fetchChapterContents(story, builtMetaData);
   }
 }

@@ -16,6 +16,7 @@ import { TruyenmoiStoryScraper } from "./Scraper/TruyenmoiStoryScraper";
 import { TruyenchuScraper } from "./Scraper/TruyenchuScraper";
 import { Truyen35Scraper } from "./Scraper/Truyen35Scraper";
 import { DoctruyenchufulXyzScraper } from "./Scraper/DoctruyenchufulXyzScraper";
+import { TruyenfullComStoryScraper } from "./Scraper/TruyenfullComStoryScraper";
 
 export enum SourceProvider {
   truyenfull = "https://truyenfull.vn/",
@@ -28,7 +29,8 @@ export enum SourceProvider {
   bachngocsach = "https://bachngocsach.com.vn",
   truyenmoi = "https://truyenmoi.org",
   truyenchu = "https://truyenchu.vn",
-  doctruyenchufulxyz = "https://doctruyenchufull.xyz",
+  doctruyenchufulxyz = "https://doctruyenchufull.live",
+  truyenfullcom = "https://truyenfull.com",
 }
 
 @Injectable()
@@ -37,6 +39,7 @@ export class MemoryStoryScraperRepository implements StoryScraperRepository {
 
   constructor(
     truyenfullScraper: TruyenfullStoryScraper,
+    truyenfullComScraper: TruyenfullComStoryScraper,
     truyen35Scraper: Truyen35Scraper,
     boygiasScraper: BoygiasStoryScraper,
     doctruyenchufulXyzScraper: DoctruyenchufulXyzScraper,
@@ -51,6 +54,7 @@ export class MemoryStoryScraperRepository implements StoryScraperRepository {
     truyenmoiStoryScraper: TruyenmoiStoryScraper,
     truyenchuScraper: TruyenchuScraper,
   ) {
+    this.scraperMapping["truyenfullcom"] = truyenfullComScraper;
     this.scraperMapping["doctruyenchufulxyz"] = doctruyenchufulXyzScraper;
     this.scraperMapping["truyenfull"] = truyenfullScraper;
     this.scraperMapping["boygias"] = boygiasScraper;

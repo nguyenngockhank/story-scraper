@@ -109,7 +109,7 @@ export abstract class BaseStoryScraper implements StoryScraper {
 
     const result: ChapterContent[] = [];
 
-    const { numberItems = 10, sleepMs = 0 } = this.options.batch;
+    const { numberItems = 10, sleepMs = 0 } = this.options.batch || {};
 
     const batches = chunk(chapters, numberItems || 10);
     let index = 1;

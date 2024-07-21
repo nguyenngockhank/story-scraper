@@ -51,10 +51,10 @@ export async function scrapeChaptersOnApi(
 async function scrapeOnPageIndex(
   context: ScraperContext,
   callbacks: ScraperCallbacks,
-  index: number,
+  pageIndex: number,
 ): Promise<ChapterWithoutIndex[]> {
   const { scraper } = context;
-  const chapterListUrl = await callbacks.buildChapterPage(context, index);
+  const chapterListUrl = await callbacks.buildChapterPage(context, pageIndex);
   const data = await scraper.fetch(chapterListUrl, {
     retryAttempt: 3,
   });

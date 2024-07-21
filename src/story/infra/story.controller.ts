@@ -44,7 +44,10 @@ export class StoryController {
     payload: StoryScrapeByUrlPayload | StoryScrapeByProviderStoryPayload,
   ) {
     if (isStoryScrapeByUrlPayload(payload)) {
-      return this.scrapeStoryByUrlUC.execute(payload.url);
+      return this.scrapeStoryByUrlUC.execute(
+        payload.url,
+        payload.metadata || {},
+      );
     }
 
     return this.scrapeStoryByProviderUC.execute(

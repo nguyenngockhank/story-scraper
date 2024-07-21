@@ -13,7 +13,7 @@ import { ScraperContext } from "./core/CoreTypes";
 @Injectable()
 export class DoctruyenchufulXyzScraper extends BaseStoryScraper {
   public options = {
-    baseUrl: "https://doctruyenchufull.xyz/",
+    baseUrl: "https://doctruyenchufull.live/",
     maxChaptersPerPage: 20,
     batch: {
       numberItems: 5,

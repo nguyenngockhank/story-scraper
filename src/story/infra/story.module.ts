@@ -19,6 +19,7 @@ import { TruyenmoiStoryScraper } from "./Scraper/TruyenmoiStoryScraper";
 import { TruyenchuScraper } from "./Scraper/TruyenchuScraper";
 import { Truyen35Scraper } from "./Scraper/Truyen35Scraper";
 import { DoctruyenchufulXyzScraper } from "./Scraper/DoctruyenchufulXyzScraper";
+import { TruyenfullComStoryScraper } from "./Scraper/TruyenfullComStoryScraper";
 
 @Module({
   controllers: [StoryController],
@@ -29,6 +30,7 @@ import { DoctruyenchufulXyzScraper } from "./Scraper/DoctruyenchufulXyzScraper";
     },
     // story scraper
     TruyenfullStoryScraper,
+    TruyenfullComStoryScraper,
     TruyenmoiStoryScraper,
     TruyenchuScraper,
     SstruyenStoryScraper,
