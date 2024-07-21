@@ -1,5 +1,19 @@
 ## Scrape with Url
 
+### metruyencv.com example
+```
+POST http://localhost:3000/api/story/scrape
+content-type: application/json
+
+{
+  "url": "https://metruyencv.com/truyen/mot-van-loai-phuong-phap-thanh-tru-nguoi-choi",
+  "metadata": {
+    "storyId": "110001"
+  }
+}
+```
+
+### Truyenfull.com example
 ```
 POST http://localhost:3000/api/story/scrape
 content-type: application/json
@@ -19,9 +33,9 @@ POST http://localhost:3000/api/transformer/story-to-mp3
 content-type: application/json
 
 {
-  "story": "chuong-giao-tong-mon-an-the",
+  "story": "nguyen-lai-ta-la-tu-tien-dai-lao-f1.32797",
   "splitPerFolder": 50,
-  "fromChapter": 737,
+  "fromChapter": 1,
   "toChapter": 5000
 }
-```
+```metruyen

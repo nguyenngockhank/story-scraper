@@ -11,7 +11,7 @@ import { map } from "../../Shared/domain/lodash";
 import { Tienhiep2StoryScraper } from "./Scraper/Tienhiep2StoryScraper";
 import { ThichTienHiepStoryScraper } from "./Scraper/ThichTienHiepStoryScraper";
 import { TangThuVienStoryScraper } from "./Scraper/TangThuVienStoryScraper";
-import { MetruyenchuStoryScraper } from "./Scraper/MetruyenchuStoryScraper";
+import { MetruyencvStoryScraper } from "./Scraper/MetruyencvStoryScraper";
 import { TruyenmoiStoryScraper } from "./Scraper/TruyenmoiStoryScraper";
 import { TruyenchuScraper } from "./Scraper/TruyenchuScraper";
 import { Truyen35Scraper } from "./Scraper/Truyen35Scraper";
@@ -31,6 +31,7 @@ export enum SourceProvider {
   truyenchu = "https://truyenchu.vn",
   doctruyenchufulxyz = "https://doctruyenchufull.live",
   truyenfullcom = "https://truyenfull.com",
+  metruyencv = "https://metruyencv.com",
 }
 
 @Injectable()
@@ -50,7 +51,7 @@ export class MemoryStoryScraperRepository implements StoryScraperRepository {
     bachngocsachStoryScraper: BachngocsachStoryScraper,
     thichTienHiepStoryScraper: ThichTienHiepStoryScraper,
     tangThuVienStoryScraper: TangThuVienStoryScraper,
-    metruyenchuStoryScraper: MetruyenchuStoryScraper,
+    metruyencvStoryScraper: MetruyencvStoryScraper,
     truyenmoiStoryScraper: TruyenmoiStoryScraper,
     truyenchuScraper: TruyenchuScraper,
   ) {
@@ -65,7 +66,7 @@ export class MemoryStoryScraperRepository implements StoryScraperRepository {
     this.scraperMapping["bachngocsach"] = bachngocsachStoryScraper;
     this.scraperMapping["thichtienhiep"] = thichTienHiepStoryScraper;
     this.scraperMapping["tangthuvien"] = tangThuVienStoryScraper;
-    this.scraperMapping["metruyenchu"] = metruyenchuStoryScraper;
+    this.scraperMapping["metruyencv"] = metruyencvStoryScraper;
     this.scraperMapping["truyenmoi"] = truyenmoiStoryScraper;
     this.scraperMapping["truyenchu"] = truyenchuScraper;
     this.scraperMapping["truyen35"] = truyen35Scraper;

@@ -32,7 +32,10 @@ export async function scrapeChaptersOnApi(
   for (let index = 1; true; index++) {
     const chapters = await scrapeOnPageIndex(context, callbacks, index);
     allChapters.push(...chapters);
-    if (chapters.length < options.maxChaptersPerPage) {
+    if (
+      chapters.length < options.maxChaptersPerPage ||
+      !options.maxChaptersPerPage
+    ) {
       break;
     }
   }

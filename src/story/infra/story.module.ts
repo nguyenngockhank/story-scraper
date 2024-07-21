@@ -14,7 +14,7 @@ import { DtruyenStoryScraper } from "./Scraper/DtruyenStoryScraper";
 import { BachngocsachStoryScraper } from "./Scraper/BachngocsachStoryScraper";
 import { ThichTienHiepStoryScraper } from "./Scraper/ThichTienHiepStoryScraper";
 import { TangThuVienStoryScraper } from "./Scraper/TangThuVienStoryScraper";
-import { MetruyenchuStoryScraper } from "./Scraper/MetruyenchuStoryScraper";
+import { MetruyencvStoryScraper } from "./Scraper/MetruyencvStoryScraper";
 import { TruyenmoiStoryScraper } from "./Scraper/TruyenmoiStoryScraper";
 import { TruyenchuScraper } from "./Scraper/TruyenchuScraper";
 import { Truyen35Scraper } from "./Scraper/Truyen35Scraper";
@@ -49,7 +49,7 @@ import { TruyenfullComStoryScraper } from "./Scraper/TruyenfullComStoryScraper";
     },
     ScrapeStoryByProviderUseCase,
     ScrapeStoryByUrlUseCase,
-    MetruyenchuStoryScraper,
+    MetruyencvStoryScraper,
   ],
   exports: [
     {
